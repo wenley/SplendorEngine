@@ -16,7 +16,7 @@ module Validation = struct
     let (_, _, cost) = card in
     let cost_after_cards : Data.cost =
       let subtract_cards ((color, count) : Data.color * int) : (Data.color * int) =
-        let (cards, _, _, _) = player in
+        let (_, cards, _, _, _) = player in
         let card_purchase_power = color_counts cards in
         match maybe_find (fun (c, i) -> c = color) card_purchase_power with
         | None -> (color, count)
@@ -27,7 +27,7 @@ module Validation = struct
     in
     let cost_after_tokens : Data.cost =
       let subtract_tokens (color, count) : (Data.color * int) =
-        let (_, _, _, tokens) = player in
+        let (_, _, _, _, tokens) = player in
         let hit (token, _) : bool =
           match token with
           | Data.Gold -> false
@@ -44,7 +44,7 @@ module Validation = struct
       List.fold_left (fun sum (_, count) -> sum + count) 0 cost_after_tokens
     in
     let gold_count : int =
-      let (_, _, _, tokens) = player in
+      let (_, _, _, _, tokens) = player in
       let (_, count) = List.find (fun (t, _) -> t = Data.Gold) tokens in
       count
     in
@@ -72,7 +72,7 @@ module Validation = struct
     List.exists hit tier1 || List.exists hit tier2 || List.exists hit tier3
 
   let can_return (player : Data.player) (tokens : Data.tokens) : bool =
-    let (_, _, _, player_tokens) = player in
+    let (_, _, _, _, player_tokens) = player in
     let rec has_tokens player_tokens (color, count) : bool =
       match player_tokens with
       | [] -> count = 0
