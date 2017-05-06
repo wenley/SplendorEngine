@@ -15,7 +15,7 @@ let rec maybe_find pred (collection : 'a list) : 'a option =
 ;;
 
 module Data = struct
-  type color = Blue | Black | Green | Red | White
+  type color = Black | Blue | Green | Red | White
   type score = int
 
   type token = Normal of color | Gold
@@ -44,4 +44,14 @@ module Data = struct
     card_score + noble_score
 
 end;;
+
+let color_for_string (s:string) : Data.color option =
+  match s with
+  | "K" -> Some Data.Black
+  | "B" -> Some Data.Blue
+  | "G" -> Some Data.Green
+  | "R" -> Some Data.Red
+  | "W" -> Some Data.White
+  | _ -> None
+;;
 
