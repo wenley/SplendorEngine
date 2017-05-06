@@ -1,6 +1,7 @@
 open Data;;
 open Validation;;
 
+(* Definition of a Player Turn *)
 module Action = struct
   type turn = Three of Data.color * Data.color * Data.color |
     Reserve of Data.card |

@@ -2,6 +2,7 @@ open Data;;
 open Action;;
 open Printf;;
 
+(* Module for all processing of strings of raw user-input *)
 module Prompt = struct
   let rec prompt_players player_number () : Data.player list =
     let prompt = sprintf "Enter name for player #%d: " player_number in

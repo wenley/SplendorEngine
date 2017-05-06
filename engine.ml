@@ -4,6 +4,7 @@ open Noble;;
 open Action;;
 open Prompt;;
 
+(* Contains the main game loop and handles routing between Player turns *)
 module Engine = struct
   type game = Data.board * Data.player list
 

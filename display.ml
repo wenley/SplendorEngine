@@ -1,5 +1,6 @@
 open Data;;
 
+(* Module for printing types in Data *)
 module Display = struct
   let color_string (color : Data.color) : string =
     match color with

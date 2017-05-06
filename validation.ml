@@ -1,5 +1,6 @@
 open Data;;
 
+(* Module for methods ensuring the validity of a Player's Turn given the current board state *)
 module Validation = struct
   let color_counts (cards : Data.card list) : Data.cost =
     let rec add_color cost color =

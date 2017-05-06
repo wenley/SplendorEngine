@@ -14,6 +14,7 @@ let rec maybe_find pred (collection : 'a list) : 'a option =
       else maybe_find pred tail
 ;;
 
+(* Module for game-specific data types *)
 module Data = struct
   type color = Black | Blue | Green | Red | White
   type score = int
