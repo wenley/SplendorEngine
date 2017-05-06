@@ -47,7 +47,7 @@ module Engine = struct
     | (new_game, true) -> new_game
     | (new_game, false) -> game_loop new_game
 
-  let rec play_game : game =
+  let rec play_game () : game =
     let game = start_game () in
     let final_game = game_loop game in
     final_game
