@@ -2,4 +2,10 @@
 *.cmi
 *.cmx
 *.o
-
+action
+data
+display
+engine
+noble
+prompt
+validation
