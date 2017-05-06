@@ -7,7 +7,7 @@ LIBRARY_DEPENDENCIES=str.cmxa
 data: data.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
-parse: data.cmx parse.cmx
+parse: globals.cmx data.cmx parse.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
 %.cmx: %.ml

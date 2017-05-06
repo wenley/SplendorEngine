@@ -1,10 +1,9 @@
-open Data;;
+open Globals
+open Data
 
 let num = "\\([0-9]\\)"
 let color = "\\([KBGRW]\\)"
 let token = "\\([KBGRWY]\\)"
-
-let (|>) x f = f x
 
 let card_for_string (input : string) : card option =
   let pattern = num ^ color ^ num ^ num ^ num ^ num ^ num in
