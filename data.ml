@@ -13,6 +13,14 @@ let string_of_color (color:color) : string =
   | Red -> "R"
   | White -> "W"
 
+let verbose_string_of_color (color : color) : string =
+  match color with
+  | Black -> "Black"
+  | Blue -> "Blue"
+  | Green -> "Green"
+  | Red -> "Red"
+  | White -> "White"
+
 let string_of_token (token:token) =
   match token with
   | Gold -> "Y"
@@ -36,6 +44,14 @@ module TokenMap : (Map.S with type key = token) = Map.Make(TokenOrder)
 type cost = int ColorMap.t
 type tokens = int TokenMap.t
 
+let verbose_string_of_cost (cost:cost) =
+  let add_color (color:color) (count:int) s =
+    let color_string = verbose_string_of_color color in
+    Printf.sprintf "%s, %d %s" s count color_string
+  in
+  let message = ColorMap.fold add_color cost "" in
+  Printf.sprintf "[%s]" message
+
 let color_of_string (input : string) : color option =
   match input with
   | "K" -> Some (Black)
@@ -57,5 +73,14 @@ let token_of_string (input : string) : token option =
 
 type noble = { score: int; cost: cost }
 type card = { score: int; color: color; cost: cost }
+
+let verbose_string_of_card (card:card) : string =
+  let { score=score; color=color; cost=cost } = card in
+  Printf.sprintf
+    "{ score: %d, color: %s; cost %s }"
+    score
+    (verbose_string_of_color color)
+    (verbose_string_of_cost cost)
+  ;;
 
 (* Testing code *)
