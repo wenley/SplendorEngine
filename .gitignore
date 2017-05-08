@@ -8,4 +8,6 @@ display
 engine
 noble
 prompt
+read_deck
+shuffle
 validation

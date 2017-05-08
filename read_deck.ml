@@ -1,8 +1,15 @@
 
-let read_lines (file : in_channel) : string list =
-  []
 
-let read_deck (filename : string) : card list =
+let rec read_lines (file : in_channel) : string list =
+  let maybe_line =
+    try Some (input_line file)
+    with End_of_file -> None
+  in
+  match maybe_line with
+  | Some line -> line :: (read_lines file)
+  | None -> []
+
+let read_deck (filename : string) : Data.card list =
   let file = open_in filename in
   let lines = read_lines file in
   close_in file ;
@@ -23,3 +30,10 @@ let read_deck (filename : string) : card list =
     | None -> failwith "Cannot unpack None"
   in
   List.map unpack good_cards
+;;
+
+(* Simple testing things *)
+
+(*let deck = read_deck "tier1.txt" in
+List.iter (fun card -> Printf.printf "%s\n" (Data.verbose_string_of_card card)) deck
+;;*)

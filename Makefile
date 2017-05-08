@@ -10,6 +10,12 @@ data: data.cmx
 parse: globals.cmx data.cmx parse.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
+read_deck: globals.cmx data.cmx parse.cmx read_deck.cmx
+	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
+
+shuffle: shuffle.cmx
+	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
+
 %.cmx: %.ml
 	$(COMPILER) -c $<
 

@@ -7,7 +7,6 @@ let token = "\\([KBGRWY]\\)"
 
 let card_for_string (input : string) : card option =
   let pattern = num ^ color ^ num ^ num ^ num ^ num ^ num in
-  print_string pattern ; print_newline () ;
   let regex = Str.regexp pattern in
   match Str.string_match regex input 0 with
   | true ->
@@ -38,9 +37,9 @@ let card_for_string (input : string) : card option =
 
 (* Testing *)
 
-let card = card_for_string "9G00000" in
+(*let card = card_for_string "9G00000" in
 match card with
 | Some ({ score = s; color = cr; cost = _ }) ->
     print_string (Printf.sprintf "%d %s" s (string_of_color cr))
 | None -> print_string "could not parse"
-;;
+;;*)
