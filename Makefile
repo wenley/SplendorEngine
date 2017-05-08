@@ -10,10 +10,13 @@ data: data.cmx
 parse: globals.cmx data.cmx parse.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
-read_deck: globals.cmx data.cmx parse.cmx read_deck.cmx
+read: globals.cmx data.cmx parse.cmx read.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
 shuffle: shuffle.cmx
+	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
+
+game: globals.cmx data.cmx parse.cmx read.cmx shuffle.cmx game.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
 %.cmx: %.ml
@@ -24,4 +27,4 @@ shuffle: shuffle.cmx
 
 clean:
 	rm -rf *.cmx *.cmi
-	rm -f splendor data data_string
+	rm -f splendor data parse read shuffle game

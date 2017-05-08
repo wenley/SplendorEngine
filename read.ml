@@ -1,5 +1,4 @@
 
-
 let rec read_lines (file : in_channel) : string list =
   let maybe_line =
     try Some (input_line file)
