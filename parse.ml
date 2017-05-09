@@ -56,6 +56,7 @@ let noble_for_string (input:string) : noble option =
       in
       let noble = { score=score; cost=cost } in
       Some noble
+;;
 
 (* Testing *)
 
@@ -65,3 +66,8 @@ match card with
     print_string (Printf.sprintf "%d %s" s (string_of_color cr))
 | None -> print_string "could not parse"
 ;;*)
+(* let noble = noble_for_string "1 00000" in
+match noble with
+| Some ({ score=s; cost=_ }) ->
+    Printf.printf "%d noble\n" s
+| None -> print_string "could not parse\n" *)

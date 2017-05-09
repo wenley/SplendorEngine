@@ -33,7 +33,7 @@ let read_data (filename : string) (parse:string -> 'a option) : 'a list =
   List.map unpack good_items
 
 let read_nobles (filename:string) : Data.noble list =
-  []
+  read_data filename Parse.noble_for_string
 
 let read_deck (filename : string) : Data.card list =
   read_data filename Parse.card_for_string
