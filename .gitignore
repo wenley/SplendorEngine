@@ -8,6 +8,7 @@ display
 engine
 game
 noble
+parse
 prompt
 read_deck
 shuffle

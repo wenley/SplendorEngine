@@ -72,6 +72,11 @@ let token_of_string (input : string) : token option =
   | _ -> None
 
 type noble = { score: int; cost: cost }
+
+let string_of_noble (noble:noble) : string =
+  let { score=score; cost=cost } = noble in
+  Printf.sprintf "Noble: %d points %s" score (verbose_string_of_cost cost)
+
 type card = { score: int; color: color; cost: cost }
 
 let verbose_string_of_card (card:card) : string =
