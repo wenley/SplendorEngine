@@ -47,13 +47,15 @@ let total_score (score:'a -> int) (items:'a list) : int =
   let scores = List.map score items in
   List.fold_left (+) 0 scores
 
-let string_of_player (player:player) : string =
-  let { name=name; tokens=tokens; nobles=nobles; cards=cards; reserved=reserved } = player in
+let score_for_player ({ nobles=nobles; cards=cards }:player) : int =
   let card_score = total_score score_for_card cards in
   let noble_score = total_score score_for_noble nobles in
+  card_score + noble_score
 
+let string_of_player (player:player) : string =
+  let { name=name; tokens=tokens; nobles=nobles; cards=cards; reserved=reserved } = player in
   let name_string = "Player " ^ name in
-  let score_string = "Total Score: " ^ (string_of_int (card_score + noble_score)) in
+  let score_string = "Total Score: " ^ (string_of_int (score_for_player player)) in
   let token_string = "Tokens: " ^ (verbose_string_of_tokens tokens) in
   let discount_string = "Card Discounts: " ^ (verbose_string_of_cost (total_discount cards)) in
   let reserve_string = "Reserved Cards: " ^ (Globals.string_of_list verbose_string_of_card "\n" reserved) in
