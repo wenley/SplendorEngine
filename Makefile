@@ -16,7 +16,7 @@ read: globals.cmx data.cmx parse.cmx read.cmx
 shuffle: shuffle.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
-game: globals.cmx data.cmx parse.cmx read.cmx shuffle.cmx game.cmx
+board: globals.cmx data.cmx parse.cmx read.cmx shuffle.cmx board.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
 %.cmx: %.ml
@@ -26,5 +26,5 @@ game: globals.cmx data.cmx parse.cmx read.cmx shuffle.cmx game.cmx
 	$(COMPILER) -c $<
 
 clean:
-	rm -rf *.cmx *.cmi
-	rm -f splendor data parse read shuffle game
+	rm -rf *.cmx *.cmi *.o
+	rm -f splendor data parse read shuffle board
