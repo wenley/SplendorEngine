@@ -7,6 +7,8 @@ type tier = {
   revealed: card list
 }
 
+type tier_level = One | Two | Three
+
 let reveal_one (tier:tier) : tier =
   let { deck=deck; revealed=revealed } = tier in
   match deck with
@@ -34,7 +36,7 @@ type board = {
   tokens: tokens
 }
 
-let card_at (tier:int) (index:int) (board:board) : card option =
+let card_at (level:tier_level) (index:int) (board:board) : card option =
   let rec item_at (n:int) (items:'a list) : 'a option =
     match n, items with
     | (_, []) -> None
@@ -45,13 +47,17 @@ let card_at (tier:int) (index:int) (board:board) : card option =
     let { revealed=cards } = tier in
     item_at index cards
   in
-  let maybe_tier : tier option = match tier with
-    | 1 -> let { one=tier } = board in Some tier
-    | 2 -> let { two=tier } = board in Some tier
-    | 3 -> let { three=tier } = board in Some tier
-    | _ -> None
+  let tier : tier = match level with
+    | One -> let { one=tier } = board in tier
+    | Two -> let { two=tier } = board in tier
+    | Three -> let { three=tier } = board in tier
   in
-  Globals.Option.flat_map (nth_card index) maybe_tier
+  nth_card index tier
+
+let purchase (level:tier_level) (index:int) (board:board) : (card option * board) =
+  match card_at level index board with
+  | None -> (None, board)
+  | Some card -> (None, board)
 
 let string_of_tier (tier:tier) : string =
   let { deck=deck; revealed=revealed } = tier in
