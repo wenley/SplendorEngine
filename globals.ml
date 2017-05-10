@@ -10,6 +10,18 @@ module Lists = struct
     | (hd::tl, n) -> hd :: (first tl (n-1))
 end
 
+module Option = struct
+  let flat_map (f:'a -> 'b option) (value: 'a option) : 'b option=
+    match value with
+    | Some v -> f v
+    | None -> None
+
+  let map (f:'a -> 'b) (value: 'a option) : 'b option =
+    match value with
+    | Some v -> Some (f v)
+    | None -> None
+end
+
 module Counter (MapType:Map.S) = struct
   let increment (key:MapType.key) (map:int MapType.t) : int MapType.t =
     map

@@ -19,7 +19,10 @@ read: globals.cmx data.cmx parse.cmx read.cmx
 shuffle: shuffle.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
-board: globals.cmx data.cmx parse.cmx read.cmx shuffle.cmx board.cmx
+board: globals.cmx data.cmx board.cmx
+	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
+
+start: globals.cmx data.cmx board.cmx parse.cmx read.cmx shuffle.cmx start.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
 %.cmx: %.ml

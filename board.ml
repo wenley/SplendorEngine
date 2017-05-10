@@ -34,41 +34,24 @@ type board = {
   tokens: tokens
 }
 
-let start_tokens (num_players:int) : int TokenMap.t =
-  let color_token_count =
-    match num_players with
-    | 2 -> 4
-    | 3 -> 5
-    | 4 -> 7
-    | _ -> failwith (Printf.sprintf "Unsupported number of players %d" num_players)
+let card_at (tier:int) (index:int) (board:board) : card option =
+  let rec item_at (n:int) (items:'a list) : 'a option =
+    match n, items with
+    | (_, []) -> None
+    | (0, hd::tl) -> Some hd
+    | (n, hd::tl) -> item_at (n-1) tl
   in
-  TokenMap.empty |> TokenMap.add (Normal Black) color_token_count
-                 |> TokenMap.add (Normal Blue) color_token_count
-                 |> TokenMap.add (Normal Green) color_token_count
-                 |> TokenMap.add (Normal Red) color_token_count
-                 |> TokenMap.add (Normal White) color_token_count
-                 |> TokenMap.add Gold 5
-
-let start_nobles (num_players : int) : noble list =
-  let all_nobles = Shuffle.shuffle (Read.read_nobles "game_data/nobles.txt") in
-  Lists.first all_nobles (num_players + 1)
-
-let start_board (num_players : int) : board =
-  let tokens = start_tokens num_players in
-  let nobles = start_nobles num_players in
-  let tier1_cards = Shuffle.shuffle (Read.read_deck "game_data/tier1.txt") in
-  let tier1_deck = reveal { deck=tier1_cards; revealed=[] } 4 in
-  {
-    one = tier1_deck;
-    two = {
-      deck = []; revealed = []
-    };
-    three = {
-      deck = []; revealed = []
-    };
-    nobles = nobles;
-    tokens = tokens
-  }
+  let nth_card (index:int) (tier:tier) : card option =
+    let { revealed=cards } = tier in
+    item_at index cards
+  in
+  let maybe_tier : tier option = match tier with
+    | 1 -> let { one=tier } = board in Some tier
+    | 2 -> let { two=tier } = board in Some tier
+    | 3 -> let { three=tier } = board in Some tier
+    | _ -> None
+  in
+  Globals.Option.flat_map (nth_card index) maybe_tier
 
 let string_of_tier (tier:tier) : string =
   let { deck=deck; revealed=revealed } = tier in
@@ -85,6 +68,3 @@ let string_of_board (board:board) : string =
   Printf.sprintf "Tier 1: %s\nTier 2: %s\nTier 3: %s\nNobles: %s" one_string two_string three_string noble_string
 ;;
 
-(* Testing code *)
-let board = start_board 4 in
-print_string (string_of_board board) ; print_newline ()
