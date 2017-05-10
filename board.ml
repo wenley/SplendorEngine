@@ -2,26 +2,26 @@ open Globals
 open Data
 
 (* Note: this could be genericized into 'a list *)
-type tier = {
-  deck: card list;
-  revealed: card list
+type 'a deck = {
+  deck: 'a list;
+  revealed: 'a list
 }
 
 type tier_level = One | Two | Three
 
-let reveal_one (tier:tier) : tier =
+let reveal_one (tier:'a deck) : 'a deck =
   let { deck=deck; revealed=revealed } = tier in
   match deck with
   | [] -> tier
   | card :: deck -> { deck=deck; revealed=card::revealed }
 
-let rec reveal (tier:tier) (n:int) : tier =
+let rec reveal (tier:'a deck) (n:int) : 'a deck =
   if n <= 0 then tier
   else
     let tier = reveal_one tier in
     reveal tier (n - 1)
 
-let take_card (tier:tier) (index:int) : (card * tier) =
+let take_card (tier:card deck) (index:int) : (card * card deck) =
   let { deck=deck; revealed=revealed } = tier in
   let taken = List.nth revealed index in
   let shown_after_take = List.filter ((<>) taken) revealed in
@@ -29,9 +29,9 @@ let take_card (tier:tier) (index:int) : (card * tier) =
   (taken, reveal_one tier_before_reveal)
 
 type board = {
-  one: tier;
-  two: tier;
-  three: tier;
+  one: card deck;
+  two: card deck;
+  three: card deck;
   nobles: noble list;
   tokens: tokens
 }
@@ -43,11 +43,11 @@ let card_at (level:tier_level) (index:int) (board:board) : card option =
     | (0, hd::tl) -> Some hd
     | (n, hd::tl) -> item_at (n-1) tl
   in
-  let nth_card (index:int) (tier:tier) : card option =
+  let nth_card (index:int) (tier:card deck) : card option =
     let { revealed=cards } = tier in
     item_at index cards
   in
-  let tier : tier = match level with
+  let tier = match level with
     | One -> let { one=tier } = board in tier
     | Two -> let { two=tier } = board in tier
     | Three -> let { three=tier } = board in tier
@@ -59,7 +59,7 @@ let purchase (level:tier_level) (index:int) (board:board) : (card option * board
   | None -> (None, board)
   | Some card -> (None, board)
 
-let string_of_tier (tier:tier) : string =
+let string_of_tier (tier:card deck) : string =
   let { deck=deck; revealed=revealed } = tier in
   let deck_depth = List.length deck in
   let board_2 = string_of_list verbose_string_of_card "\n" revealed in
