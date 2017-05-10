@@ -9,6 +9,7 @@ engine
 game
 noble
 parse
+player
 prompt
 read_deck
 shuffle

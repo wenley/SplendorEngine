@@ -7,6 +7,9 @@ LIBRARY_DEPENDENCIES=str.cmxa
 data: data.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
+player: globals.cmx data.cmx player.cmx
+	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
+
 parse: globals.cmx data.cmx parse.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 

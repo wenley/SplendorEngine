@@ -47,9 +47,22 @@ type tokens = int TokenMap.t
 let verbose_string_of_cost (cost:cost) =
   let add_color (color:color) (count:int) s =
     let color_string = verbose_string_of_color color in
-    Printf.sprintf "%s, %d %s" s count color_string
+    Printf.sprintf "%d %s, %s" count color_string s
   in
   let message = ColorMap.fold add_color cost "" in
+  Printf.sprintf "[%s]" message
+
+let verbose_string_of_tokens (tokens:tokens) =
+  let add_color (color:color) (count:int) s =
+    let color_string = verbose_string_of_color color in
+    Printf.sprintf "%d %s, %s" count color_string s
+  in
+  let add_token (token:token) (count:int) (s:string) : string =
+    match token with
+    | Normal c -> add_color c count s
+    | Gold -> Printf.sprintf "%d %s, %s" count "Gold" s
+  in
+  let message = TokenMap.fold add_token tokens "" in
   Printf.sprintf "[%s]" message
 
 let color_of_string (input : string) : color option =
