@@ -33,4 +33,4 @@ start: globals.cmx data.cmx board.cmx parse.cmx read.cmx shuffle.cmx start.cmx
 
 clean:
 	rm -rf *.cmx *.cmi *.o
-	rm -f splendor data parse read shuffle board
+	rm -f splendor data player parse read shuffle board start
