@@ -4,7 +4,7 @@ LIBRARY_INTERFACES=map.cmi
 LIBRARY_DEPENDENCIES=str.cmxa
 # map.cmx is already bundled into stdlib.cmxa
 
-data: data.cmx
+data: globals.cmx data.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
 player: globals.cmx data.cmx player.cmx

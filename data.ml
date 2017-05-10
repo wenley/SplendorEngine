@@ -40,6 +40,8 @@ end
 
 module ColorMap : (Map.S with type key = color) = Map.Make(ColorOrder)
 module TokenMap : (Map.S with type key = token) = Map.Make(TokenOrder)
+module ColorCounter = Globals.Counter(ColorMap)
+module TokenCounter = Globals.Counter(TokenMap)
 
 type cost = int ColorMap.t
 type tokens = int TokenMap.t
