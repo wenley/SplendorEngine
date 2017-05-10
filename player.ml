@@ -8,6 +8,26 @@ type player = {
   reserved: card list;
 }
 
+let add_noble (noble:noble) (player:player) : player =
+  let { nobles=nobles } = player in
+  { player with nobles = noble :: nobles }
+
+let add_card (card:card) (player:player) : player =
+  let { cards=cards } = player in
+  { player with cards = card :: cards }
+
+let add_reserved_card (card:card) (player:player) : player =
+  let { reserved=reserved } = player in
+  { player with reserved = card :: reserved }
+
+let add_token (token:token) (player:player) : player =
+  let { tokens=tokens } = player in
+  { player with tokens=TokenCounter.increment token tokens }
+
+let use_token (token:token) (player:player) : player =
+  let { tokens=tokens } = player in
+  { player with tokens=TokenCounter.decrement token tokens }
+
 let total_discount (cards:card list) : cost =
   let add_card (cost:cost) (card:card) : cost =
     let { score=_; color=color; cost=_ } = card in
