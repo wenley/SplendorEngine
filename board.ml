@@ -21,10 +21,10 @@ let rec reveal (tier:'a deck) (n:int) : 'a deck =
     reveal tier (n - 1)
 
 let take_card (tier:card deck) (index:int) : (card * card deck) =
-  let { deck=deck; revealed=revealed } = tier in
+  let { deck; revealed } = tier in
   let taken = List.nth revealed index in
   let shown_after_take = List.filter ((<>) taken) revealed in
-  let tier_before_reveal = { deck=deck; revealed=shown_after_take } in
+  let tier_before_reveal = { deck; revealed=shown_after_take } in
   (taken, reveal_one tier_before_reveal)
 
 type board = {
@@ -60,7 +60,7 @@ let claim_card_at (level:tier_level) (index:int) (board:board) : (card option * 
   | None -> (None, board)
   | Some card ->
       let tier = tier_for_board level board in
-      let { revealed=revealed } = tier in
+      let { revealed } = tier in
       let new_revealed = List.filter ((<>) card) revealed in
       let new_tier = reveal_one { tier with revealed = new_revealed } in
       let new_board = match level with
@@ -71,13 +71,13 @@ let claim_card_at (level:tier_level) (index:int) (board:board) : (card option * 
       (Some card, new_board)
 
 let string_of_tier (tier:card deck) : string =
-  let { deck=deck; revealed=revealed } = tier in
+  let { deck; revealed } = tier in
   let deck_depth = List.length deck in
   let board_2 = string_of_list verbose_string_of_card "\n" revealed in
   Printf.sprintf "(%d cards remaining)%s" deck_depth board_2
 
 let string_of_board (board:board) : string =
-  let { one=one; two=two; three=three; nobles=nobles; tokens=tokens } = board in
+  let { one; two; three; nobles; tokens } = board in
   let one_string = string_of_tier one in
   let two_string = string_of_tier two in
   let three_string = string_of_tier three in

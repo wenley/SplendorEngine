@@ -30,7 +30,7 @@ let card_for_string (input : string) : card option =
                        |> ColorMap.add Red red_cost
                        |> ColorMap.add White white_cost
       in
-      let card = { score = score; color = color; cost = cost } in
+      let card = { score; color; cost } in
       Some card
   | false -> None
 ;;
@@ -54,7 +54,7 @@ let noble_for_string (input:string) : noble option =
                        |> ColorMap.add Red red_cost
                        |> ColorMap.add White white_cost
       in
-      let noble = { score=score; cost=cost } in
+      let noble = { score; cost } in
       Some noble
 ;;
 
