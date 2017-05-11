@@ -1,7 +1,6 @@
 open Globals
 open Data
 
-(* Note: this could be genericized into 'a list *)
 type 'a deck = {
   deck: 'a list;
   revealed: 'a list
@@ -36,6 +35,12 @@ type board = {
   tokens: tokens
 }
 
+let tier_for_board (level:tier_level) (board:board) : card deck =
+  match level with
+  | One -> let { one=tier } = board in tier
+  | Two -> let { two=tier } = board in tier
+  | Three -> let { three=tier } = board in tier
+
 let card_at (level:tier_level) (index:int) (board:board) : card option =
   let rec item_at (n:int) (items:'a list) : 'a option =
     match n, items with
@@ -47,17 +52,23 @@ let card_at (level:tier_level) (index:int) (board:board) : card option =
     let { revealed=cards } = tier in
     item_at index cards
   in
-  let tier = match level with
-    | One -> let { one=tier } = board in tier
-    | Two -> let { two=tier } = board in tier
-    | Three -> let { three=tier } = board in tier
-  in
+  let tier = tier_for_board level board in
   nth_card index tier
 
-let purchase (level:tier_level) (index:int) (board:board) : (card option * board) =
+let claim_card_at (level:tier_level) (index:int) (board:board) : (card option * board) =
   match card_at level index board with
   | None -> (None, board)
-  | Some card -> (None, board)
+  | Some card ->
+      let tier = tier_for_board level board in
+      let { revealed=revealed } = tier in
+      let new_revealed = List.filter ((<>) card) revealed in
+      let new_tier = reveal_one { tier with revealed = new_revealed } in
+      let new_board = match level with
+      | One -> { board with one = new_tier }
+      | Two -> { board with two = new_tier }
+      | Three -> { board with three = new_tier }
+      in
+      (Some card, new_board)
 
 let string_of_tier (tier:card deck) : string =
   let { deck=deck; revealed=revealed } = tier in
