@@ -28,6 +28,18 @@ let use_token (token:token) (player:player) : player =
   let { tokens=tokens } = player in
   { player with tokens=TokenCounter.decrement token tokens }
 
+(* Should only be used during a purchase action,
+ * in tandem with balancing tokens and adding the card back *)
+let remove_reserved (index:int) (player:player) : player =
+  let rec remove_card_at (index:int) (cards:card list) : card list =
+    match index, cards with
+    | _, [] -> []
+    | 0, hd :: tl -> tl
+    | n, hd :: tl -> hd :: remove_card_at (n-1) tl
+  in
+  let { reserved=reserved } = player in
+  { player with reserved = remove_card_at index reserved }
+
 let total_discount (cards:card list) : cost =
   let add_card (cost:cost) (card:card) : cost =
     let { score=_; color=color; cost=_ } = card in
