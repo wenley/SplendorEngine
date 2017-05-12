@@ -22,12 +22,21 @@ module Option = struct
     | None -> None
 end
 
-module Counter (MapType:Map.S) = struct
-  let increment (key:MapType.key) (map:int MapType.t) : int MapType.t =
-    map
+module Counter (MapType:Map.S) : sig
+  val increment : MapType.key -> int MapType.t -> int MapType.t
+  val decrement : MapType.key -> int MapType.t -> int MapType.t
+end = struct
+  let apply_delta (value:int) (key:MapType.key) (map:int MapType.t) : int MapType.t =
+    let has_key = MapType.exists (fun k -> fun _ -> k = key) map in
+    match has_key with
+    | false -> MapType.add key value map
+    | true ->
+        let old_value = MapType.find key map in
+        MapType.add key (old_value+value) map
 
-  let decrement (key:MapType.key) (map:int MapType.t) : int MapType.t =
-    map
+  let increment = apply_delta 1
+
+  let decrement = apply_delta (-1)
 end
 
 let string_of_list (string_of:'a -> string) (joiner:string) (items:'a list) : string =
