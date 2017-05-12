@@ -12,13 +12,15 @@ DEPENDENCIES = {
   shuffle: [],
   board: [:globals, :data],
   start: [:board, :read, :shuffle],
-  engine: [:player, :start],
+  engine: [:board, :player, :start],
 }
 
 SOURCE_FILES = Rake::FileList.new('*.ml') do |fl|
   # exclude things here
 end
 INTERFACE_FILES = Rake::FileList.new('*.mli')
+CLEAN.include(SOURCE_FILES.ext(''))
+CLEAN.include(SOURCE_FILES.ext('.o'))
 
 def execute(command)
   puts command
@@ -48,12 +50,11 @@ task :all => DEPENDENCIES.keys
 rule '.cmx' => '.ml' do |task|
   execute "ocamlopt -c #{task.source}"
 end
+CLEAN.include(SOURCE_FILES.ext('.cmx'))
 
 rule '.cmi' => '.mli' do |task|
   execute "ocamlopt -c #{task.source}"
 end
-
-CLEAN.include(SOURCE_FILES.ext(''))
-CLEAN.include(SOURCE_FILES.ext('.cmx'))
-CLEAN.include(SOURCE_FILES.ext('.o'))
+CLEAN.include(INTERFACE_FILES.ext('.cmi'))
 CLEAN.include(SOURCE_FILES.ext('.cmi'))
+
