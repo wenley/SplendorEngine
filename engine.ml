@@ -1,9 +1,9 @@
 
 (**
  * Steps:
- * - Start the game
+ * - Start the game (start.ml)
  *   - Get player count
- *   - Initialize board data (start.ml)
+ *   - Initialize board data
  *   - Get player names
  *   - Make game object
  * - Game loop, for each player
@@ -17,6 +17,6 @@
  *   - Check for cleanup
  *     - Claim nobles
  *     - Put back tokens
- * - After each full loop, check for end of game
+ * - After each full loop, check for end of game (game.ml)
  *)
 
