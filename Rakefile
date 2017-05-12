@@ -5,14 +5,17 @@ LIBRARIES = ['str.cmxa']
 
 DEPENDENCIES = {
   globals: [],
+  shuffle: [],
   data: [:globals],
+
+  board: [:data],
   player: [:data],
   parse: [:data],
+
   read: [:parse],
-  shuffle: [],
-  board: [:globals, :data],
   cleanup: [:player, :board],
   game: [:player, :board],
+
   start: [:board, :read, :shuffle, :game],
   engine: [:board, :player, :start, :game],
 }
