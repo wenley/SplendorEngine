@@ -14,7 +14,7 @@
  *     - Read another action if invalid
  *   - Perform action
  *     - Update all relevant data structures
- *   - Check for cleanup
+ *   - Check for cleanup (cleanup.ml)
  *     - Claim nobles
  *     - Put back tokens
  * - After each full loop, check for end of game (game.ml)

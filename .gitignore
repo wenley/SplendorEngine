@@ -4,6 +4,7 @@
 *.o
 action
 board
+cleanup
 data
 display
 engine
