@@ -36,8 +36,33 @@ let start_board (num_players : int) : board =
     nobles = nobles;
     tokens = tokens
   }
+
+let rec prompt_player_count () : int =
+  print_string "How many players? (2 to 4 supported) " ;
+  let input = read_line () in
+  match input with
+  | "2" -> 2
+  | "3" -> 3
+  | "4" -> 4
+  | _ ->
+      Printf.printf "Unprocessable entry %s\n" input;
+      prompt_player_count ()
+
+let rec prompt_player_names (n:int) (players:Player.player list) : Player.player list =
+  if n <= 0 then players
+  else
+    (Printf.printf "%d players remaining. Enter a player name: " n;
+    let name = read_line () in
+    let player = Player.empty_player name in
+    prompt_player_names (n-1) (player :: players))
+
+let start_game () : Game.game =
+  let player_count = prompt_player_count () in
+  let board = start_board player_count in
+  let players = prompt_player_names player_count [] in
+  { Game.players; Game.board }
 ;;
 
-(* Testing code *)
-let board = start_board 4 in
+let game = start_game () in
+let { Game.board } = game in
 print_string (string_of_board board) ; print_newline ()

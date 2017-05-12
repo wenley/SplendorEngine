@@ -11,8 +11,9 @@ DEPENDENCIES = {
   read: [:parse],
   shuffle: [],
   board: [:globals, :data],
-  start: [:board, :read, :shuffle],
-  engine: [:board, :player, :start],
+  game: [:player, :board],
+  start: [:board, :read, :shuffle, :game],
+  engine: [:board, :player, :start, :game],
 }
 
 SOURCE_FILES = Rake::FileList.new('*.ml') do |fl|
