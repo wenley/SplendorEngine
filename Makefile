@@ -1,6 +1,5 @@
 
 COMPILER=ocamlopt
-LIBRARY_INTERFACES=map.cmi
 LIBRARY_DEPENDENCIES=str.cmxa
 # map.cmx is already bundled into stdlib.cmxa
 
