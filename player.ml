@@ -43,7 +43,7 @@ let remove_reserved (index:int) (player:player) : player =
   let { reserved=reserved } = player in
   { player with reserved = remove_card_at index reserved }
 
-let total_discount (cards:card list) : cost =
+let total_discount ({ cards }:player) : cost =
   let add_card (cost:cost) (card:card) : cost =
     let { score=_; color=color; cost=_ } = card in
     let has_key = ColorMap.exists (fun k _ -> k = color) cost in
@@ -72,7 +72,7 @@ let string_of_player (player:player) : string =
   let name_string = "Player " ^ name in
   let score_string = "Total Score: " ^ (string_of_int (score_for_player player)) in
   let token_string = "Tokens: " ^ (verbose_string_of_tokens tokens) in
-  let discount_string = "Card Discounts: " ^ (verbose_string_of_cost (total_discount cards)) in
+  let discount_string = "Card Discounts: " ^ (verbose_string_of_cost (total_discount player)) in
   let reserve_string = "Reserved Cards: " ^ (Globals.string_of_list verbose_string_of_card "\n" reserved) in
 
   let lines = name_string :: score_string :: token_string :: discount_string :: reserve_string :: [] in
