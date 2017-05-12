@@ -14,11 +14,11 @@ let reveal_one (tier:'a deck) : 'a deck =
   | [] -> tier
   | card :: deck -> { deck=deck; revealed=card::revealed }
 
-let rec reveal (tier:'a deck) (n:int) : 'a deck =
+let rec reveal (n:int) (tier:'a deck) : 'a deck =
   if n <= 0 then tier
   else
     let tier = reveal_one tier in
-    reveal tier (n - 1)
+    reveal (n-1) tier
 
 let take_card (tier:card deck) (index:int) : (card * card deck) =
   let { deck; revealed } = tier in

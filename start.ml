@@ -24,7 +24,7 @@ let start_board (num_players : int) : board =
   let tokens = start_tokens num_players in
   let nobles = start_nobles num_players in
   let tier1_cards = Shuffle.shuffle (Read.read_deck "game_data/tier1.txt") in
-  let tier1_deck = reveal { deck=tier1_cards; revealed=[] } 4 in
+  let tier1_deck = reveal 4 { deck=tier1_cards; revealed=[] } in
   {
     one = tier1_deck;
     two = {
