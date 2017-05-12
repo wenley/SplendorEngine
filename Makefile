@@ -25,6 +25,9 @@ board: globals.cmx data.cmx board.cmx
 start: globals.cmx data.cmx board.cmx parse.cmx read.cmx shuffle.cmx start.cmx
 	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
 
+engine: globals.cmx data.cmx player.cmx board.cmx parse.cmx read.cmx shuffle.cmx start.cmx engine.cmx
+	$(COMPILER) -o $@ $(LIBRARY_DEPENDENCIES) $^
+
 %.cmx: %.ml
 	$(COMPILER) -c $<
 

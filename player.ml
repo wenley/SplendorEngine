@@ -8,6 +8,9 @@ type player = {
   reserved: card list;
 }
 
+let empty_player (name:string) : player =
+  { name; tokens=TokenMap.empty; nobles=[]; cards=[]; reserved=[] }
+
 let add_noble (noble:noble) (player:player) : player =
   let { nobles } = player in
   { player with nobles = noble :: nobles }
