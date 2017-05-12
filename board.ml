@@ -20,13 +20,6 @@ let rec reveal (n:int) (tier:'a deck) : 'a deck =
     let tier = reveal_one tier in
     reveal (n-1) tier
 
-let take_card (tier:card deck) (index:int) : (card * card deck) =
-  let { deck; revealed } = tier in
-  let taken = List.nth revealed index in
-  let shown_after_take = List.filter ((<>) taken) revealed in
-  let tier_before_reveal = { deck; revealed=shown_after_take } in
-  (taken, reveal_one tier_before_reveal)
-
 type board = {
   one: card deck;
   two: card deck;
@@ -55,6 +48,11 @@ let card_at (level:tier_level) (index:int) (board:board) : card option =
   let tier = tier_for_board level board in
   nth_card index tier
 
+(**
+ * Remove the card of the specified tier and index from the board,
+ * then return the removed card (if any) with the new board.
+ * A new card will be revealed if necessary.
+ *)
 let claim_card_at (level:tier_level) (index:int) (board:board) : (card option * board) =
   match card_at level index board with
   | None -> (None, board)
