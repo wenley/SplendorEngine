@@ -48,14 +48,23 @@ end
 
 task :all => DEPENDENCIES.keys
 
-rule '.cmx' => '.ml' do |task|
+rule '.cmx' => ['.ml', '.cmi'] do |task|
   execute "ocamlopt -c #{task.source}"
 end
 CLEAN.include(SOURCE_FILES.ext('.cmx'))
 
-rule '.cmi' => '.mli' do |task|
+def source_for_interface(filename)
+  root = filename.ext('')
+  interface = INTERFACE_FILES.detect { |f| f.ext('') == root }
+  source = SOURCE_FILES.detect { |f| f.ext('') == root }
+
+  interface || source
+end
+
+rule '.cmi' => ->(f){ source_for_interface(f) } do |task|
   execute "ocamlopt -c #{task.source}"
 end
+
 CLEAN.include(INTERFACE_FILES.ext('.cmi'))
 CLEAN.include(SOURCE_FILES.ext('.cmi'))
 
