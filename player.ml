@@ -78,3 +78,6 @@ let string_of_player (player:player) : string =
   let lines = name_string :: score_string :: token_string :: discount_string :: reserve_string :: [] in
   Globals.string_of_list (fun s -> s) "\n" lines
 
+let print_player (player:player) : unit =
+  print_string (string_of_player player)
+

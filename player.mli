@@ -23,4 +23,5 @@ val remove_reserved : int -> player -> player
 val total_discount : player -> cost
 val score_for_player : player -> int
 val string_of_player : player -> string
+val print_player : player -> unit
 

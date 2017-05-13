@@ -4,21 +4,31 @@ require 'rake/clean'
 LIBRARIES = ['str.cmxa']
 
 DEPENDENCIES = {
+  # No dependencies
   globals: [],
   shuffle: [],
-  data: [:globals],
 
+  # Data types
+  data: [:globals],
   board: [:data],
   player: [:data],
   parse: [:data],
-
-  read: [:parse],
+  action: [:data, :board],
   game: [:player, :board],
+
+  # IO modules
   display: [:board],
+  read: [:parse],
+  prompt: [:data, :action],
   cleanup: [:player, :board, :display],
 
+  # Update game state
+  validation: [:action, :player, :board],
+  process: [:action, :player, :board],
+
+  # High-level modules
   start: [:board, :read, :shuffle, :game],
-  engine: [:board, :player, :start, :game],
+  engine: [:start, :prompt, :validation, :process, :cleanup],
 }
 
 SOURCE_FILES = Rake::FileList.new('*.ml') do |fl|
