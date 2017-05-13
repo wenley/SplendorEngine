@@ -81,7 +81,15 @@ let fancy_print_nobles (nobles:Data.noble list) : unit =
   let header_line = "Nobles:   " in
   let blank_line = "          " in
   let left_padding = pad 6 blank_line (header_line :: (pad 3 blank_line [])) in
-  let noble_lines = List.map noble_strings nobles in
+  let noble_lines : string list list =
+    match nobles with
+    | [] ->
+        let null_lines : string list =
+          pad 6 blank_line ("(None)" :: (pad 3 blank_line []))
+        in
+        null_lines :: []
+    | _ -> List.map noble_strings nobles
+  in
   let all_lines = left_padding :: noble_lines in
   parallel_prints all_lines
 
@@ -116,7 +124,7 @@ let fancy_print_tier (deck:Data.card Board.deck) (header:string) : unit =
 let fancy_print_tokens (tokens:Data.tokens) : unit =
   let token_lines : string list =
     let add_token (token:Data.token) (count:int) (stack:string list) : string list =
-      Printf.sprintf "%5s: %2d" (verbose_string_of_token token) count :: stack
+      Printf.sprintf "%7s: %2d" (Data.verbose_string_of_token token) count :: stack
     in
     Data.TokenMap.fold add_token tokens [] in
   let header_lines : string list =
@@ -133,6 +141,6 @@ let fancy_print_board (board:Board.board) : unit =
   print_newline ();
   fancy_print_tier board.Board.three "Tier3";
   fancy_print_tier board.Board.two "Tier2";
-  fancy_print_tier board.Board.one "Tier1"
+  fancy_print_tier board.Board.one "Tier1";
   fancy_print_tokens board.Board.tokens
 
