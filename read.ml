@@ -37,10 +37,3 @@ let read_nobles (filename:string) : Data.noble list =
 
 let read_deck (filename : string) : Data.card list =
   read_data filename Parse.card_for_string
-;;
-
-(* Simple testing things *)
-
-(*let deck = read_deck "tier1.txt" in
-List.iter (fun card -> Printf.printf "%s\n" (Data.verbose_string_of_card card)) deck
-;;*)

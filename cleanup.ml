@@ -45,10 +45,3 @@ let rec discard_tokens (player:player) : player =
   else
     discard_tokens (discard_token player)
 
-(* Testing code *)
-;;
-
-let tokens = TokenMap.empty |> TokenMap.add (Normal Black) 12 in
-let player = { (empty_player "You") with tokens = tokens } in
-discard_tokens player
-;;

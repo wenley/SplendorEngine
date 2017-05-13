@@ -106,6 +106,4 @@ let verbose_string_of_card (card:card) : string =
     score
     (verbose_string_of_color color)
     (verbose_string_of_cost cost)
-  ;;
 
-(* Testing code *)

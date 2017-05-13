@@ -81,5 +81,4 @@ let string_of_board (board:board) : string =
   let three_string = string_of_tier three in
   let noble_string = string_of_list string_of_noble "\n" nobles in
   Printf.sprintf "Tier 1: %s\nTier 2: %s\nTier 3: %s\nNobles: %s" one_string two_string three_string noble_string
-;;
 

@@ -61,11 +61,3 @@ let start_game () : Game.game =
   let board = start_board player_count in
   let players = prompt_player_names player_count [] in
   { Game.players; Game.board }
-;;
-
-(* Testing *)
-(*
-let game = start_game () in
-let { Game.board } = game in
-print_string (string_of_board board) ; print_newline ()
-*)
