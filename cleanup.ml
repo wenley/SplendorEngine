@@ -23,7 +23,7 @@ let claim_nobles (player:player) (board:board) : (player * board) =
 let rec discard_token (player:player) : player =
   let add_token token _ string : string = string_of_token token ^ string in
   let tokens_available = TokenMap.fold add_token player.tokens "" in
-  Printf.printf "You have tokens: %s\n" (verbose_string_of_tokens player.tokens);
+  Display.fancy_print_tokens player.tokens "Tokens";
   Printf.printf "Choose a token to discard: [%s] " tokens_available;
   let input = read_line () in
   match token_of_string input with

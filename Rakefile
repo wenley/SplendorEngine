@@ -13,9 +13,9 @@ DEPENDENCIES = {
   parse: [:data],
 
   read: [:parse],
-  cleanup: [:player, :board],
   game: [:player, :board],
   display: [:board],
+  cleanup: [:player, :board, :display],
 
   start: [:board, :read, :shuffle, :game],
   engine: [:board, :player, :start, :game],
