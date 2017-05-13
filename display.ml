@@ -77,14 +77,19 @@ let noble_strings (noble:Data.noble) : string list =
   border :: noble_score_line :: noble_cost_lines @ border :: []
 
 let fancy_print_nobles (nobles:Data.noble list) : unit =
-  let all_lines = List.map noble_strings nobles in
+  let header_line = "Nobles:   " in
+  let blank_line = "          " in
+  let left_padding = pad 6 blank_line (header_line :: (pad 3 blank_line [])) in
+  let noble_lines = List.map noble_strings nobles in
+  let all_lines = left_padding :: noble_lines in
   parallel_prints all_lines
 
-let deck_strings (stack:Data.card list) : string list =
+let deck_strings (stack:Data.card list) (header:string) : string list =
   let card_count = List.length stack in
   let count_line = Printf.sprintf "|%5d|" card_count in
-  border :: "|Cards|" :: count_line ::
-    empty_line :: empty_line :: empty_line :: border :: []
+  let header_line = Printf.sprintf "|%5s|" header in
+  border :: header_line :: "|Cards|" :: count_line ::
+    empty_line :: empty_line :: border :: []
 
 let card_strings (card:Data.card) : string list =
   let first_line =
@@ -97,20 +102,19 @@ let card_strings (card:Data.card) : string list =
 let tier_spacer_strings : string list =
   pad 7 "   " []
 
-let fancy_print_tier (deck:Data.card Board.deck) : unit =
+let fancy_print_tier (deck:Data.card Board.deck) (header:string) : unit =
   let strings =
-    deck_strings deck.Board.deck
+    deck_strings deck.Board.deck header
     :: tier_spacer_strings
     :: List.map card_strings deck.Board.revealed
   in
   parallel_prints strings
 
 let fancy_print_board (board:Board.board) : unit =
-  Printf.printf "Nobles:\n";
   fancy_print_nobles board.Board.nobles;
   print_newline ();
-  fancy_print_tier board.Board.three;
-  fancy_print_tier board.Board.two;
-  fancy_print_tier board.Board.one
+  fancy_print_tier board.Board.three "Tier3";
+  fancy_print_tier board.Board.two "Tier2";
+  fancy_print_tier board.Board.one "Tier1"
   (* Print tokens *)
 

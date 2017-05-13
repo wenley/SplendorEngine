@@ -13,5 +13,5 @@ let deck =
     Board.revealed=card::card::[];
   }
 in
-Display.fancy_print_tier deck
+Display.fancy_print_tier deck "Head"
 ;;
