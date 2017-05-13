@@ -43,6 +43,11 @@ let rec repeat_print (n:int) (s:string) : unit =
 let print_top_border (n:int) : unit =
   repeat_print n border
 
+(**
+ * NOTE: Silent weird behavior if:
+ * strings are different lengths
+ * sublists are different lengths
+ *)
 let rec parallel_prints (strings:string list list) : unit =
   if List.length (List.hd strings) <= 0 then ()
   else
@@ -56,12 +61,6 @@ let rec parallel_prints (strings:string list list) : unit =
   print_newline () ;
   parallel_prints one_less_line
 
-let print_noble_scores (nobles:Data.noble list) =
-  let print_score (noble:Data.noble) =
-    Printf.printf "|    %d|" noble.Data.score
-  in
-  List.iter print_score nobles
-
 let cost_lines (cost:Data.cost) : string list =
   let cost_line (color:Data.color) (n:int) (lines:string list) : string list =
     let line = Printf.sprintf "|   %s%d|" (Data.string_of_color color) n in
@@ -69,26 +68,17 @@ let cost_lines (cost:Data.cost) : string list =
   in
   Data.ColorMap.fold cost_line cost []
 
-let print_noble_costs (nobles:Data.noble list) : unit =
-  let noble_cost_lines : string list list =
-    let lines_for (noble:Data.noble) : string list =
-      let raw_lines = cost_lines noble.Data.cost in
-      pad 3 empty_line raw_lines
-    in
-    List.map lines_for nobles
+let noble_strings (noble:Data.noble) : string list =
+  let noble_score_line = Printf.sprintf "|%5d|" noble.Data.score in
+  let noble_cost_lines = 
+    let raw_lines = cost_lines noble.Data.cost in
+    pad 3 empty_line raw_lines
   in
-  parallel_prints noble_cost_lines
+  border :: noble_score_line :: noble_cost_lines @ border :: []
 
 let fancy_print_nobles (nobles:Data.noble list) : unit =
-  let count = List.length nobles in
-  print_top_border count ;
-  print_newline ();
-  print_noble_scores nobles ;
-  print_newline ();
-  print_noble_costs nobles ;
-  print_top_border count ;
-  print_newline ();
-  ()
+  let all_lines = List.map noble_strings nobles in
+  parallel_prints all_lines
 
 let deck_strings (stack:Data.card list) : string list =
   let card_count = List.length stack in
@@ -98,7 +88,7 @@ let deck_strings (stack:Data.card list) : string list =
 
 let card_strings (card:Data.card) : string list =
   let first_line =
-    Printf.sprintf "|%s   %d|" (Data.string_of_color card.Data.color) card.Data.score
+    Printf.sprintf "|%s%4d|" (Data.string_of_color card.Data.color) card.Data.score
   in
   let raw_costs = cost_lines card.Data.cost in
   let costs = pad 4 empty_line raw_costs in
