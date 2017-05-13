@@ -15,7 +15,6 @@ Card:
 |   G2|
 |   W2|
 |   R2|
-|   R2|
 +-----+
 
 Deck:
@@ -29,6 +28,7 @@ Deck:
 
  *)
 let border = "+-----+"
+let empty_line = "|     |"
 
 let rec pad (length:int) (padding:string) (strings:string list) =
   let list_length = List.length strings in
@@ -62,15 +62,18 @@ let print_noble_scores (nobles:Data.noble list) =
   in
   List.iter print_score nobles
 
+let cost_lines (cost:Data.cost) : string list =
+  let cost_line (color:Data.color) (n:int) (lines:string list) : string list =
+    let line = Printf.sprintf "|   %s%d|" (Data.string_of_color color) n in
+    line :: lines
+  in
+  Data.ColorMap.fold cost_line cost []
+
 let print_noble_costs (nobles:Data.noble list) : unit =
   let noble_cost_lines : string list list =
-    let cost_line (color:Data.color) (n:int) (lines:string list) : string list =
-      let line = Printf.sprintf "|   %s%d|" (Data.string_of_color color) n in
-      line :: lines
-    in
     let lines_for (noble:Data.noble) : string list =
-      let raw_lines = Data.ColorMap.fold cost_line noble.Data.cost [] in
-      pad 3 "|     |" raw_lines
+      let raw_lines = cost_lines noble.Data.cost in
+      pad 3 empty_line raw_lines
     in
     List.map lines_for nobles
   in
@@ -78,8 +81,6 @@ let print_noble_costs (nobles:Data.noble list) : unit =
 
 let fancy_print_nobles (nobles:Data.noble list) : unit =
   let count = List.length nobles in
-  print_int count;
-  print_newline ();
   print_top_border count ;
   print_newline ();
   print_noble_scores nobles ;
@@ -89,8 +90,23 @@ let fancy_print_nobles (nobles:Data.noble list) : unit =
   print_newline ();
   ()
 
+let deck_strings (stack:Data.card list) : string list =
+  let card_count = List.length stack in
+  let count_line = Printf.sprintf "|%5d|" card_count in
+  border :: "|Cards|" :: count_line ::
+    empty_line :: empty_line :: empty_line :: border :: []
+
+let card_strings (card:Data.card) : string list =
+  let first_line =
+    Printf.sprintf "|%s   %d|" (Data.string_of_color card.Data.color) card.Data.score
+  in
+  let raw_costs = cost_lines card.Data.cost in
+  let costs = pad 4 empty_line raw_costs in
+  border :: first_line :: costs @ border:: []
+
 let fancy_print_tier (deck:Data.card Board.deck) : unit =
-  ()
+  let strings = deck_strings deck.Board.deck :: List.map card_strings deck.Board.revealed in
+  parallel_prints strings
 
 let fancy_print_board (board:Board.board) : unit =
   ()
