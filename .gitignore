@@ -17,3 +17,4 @@ read_deck
 shuffle
 start
 validation
+test_*

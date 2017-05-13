@@ -1,6 +1,6 @@
 
 (*
-Nobel:
+Noble:
 +-----+
 |    3|
 |   K2|
@@ -104,18 +104,23 @@ let card_strings (card:Data.card) : string list =
   let costs = pad 4 empty_line raw_costs in
   border :: first_line :: costs @ border:: []
 
+let tier_spacer_strings : string list =
+  pad 7 "   " []
+
 let fancy_print_tier (deck:Data.card Board.deck) : unit =
-  let strings = deck_strings deck.Board.deck :: List.map card_strings deck.Board.revealed in
+  let strings =
+    deck_strings deck.Board.deck
+    :: tier_spacer_strings
+    :: List.map card_strings deck.Board.revealed
+  in
   parallel_prints strings
 
 let fancy_print_board (board:Board.board) : unit =
-  ()
+  Printf.printf "Nobles:\n";
+  fancy_print_nobles board.Board.nobles;
+  print_newline ();
+  fancy_print_tier board.Board.three;
+  fancy_print_tier board.Board.two;
+  fancy_print_tier board.Board.one
+  (* Print tokens *)
 
-(* testing *)
-;;
-
-let cost = Data.ColorMap.empty |> Data.ColorMap.add (Data.Blue) 2 in
-let noble = { Data.score=3; Data.cost=cost } in
-let nobles = noble :: noble :: [] in
-fancy_print_nobles nobles
-;;
