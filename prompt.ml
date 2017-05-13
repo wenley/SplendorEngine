@@ -81,8 +81,14 @@ let rec find_action (input:string) pap : Action.action option =
       | false -> find_action input tl
       | true -> Some (parse input)
 
-let action_for_string (input:string) : Action.action option =
+let parse_action (input:string) =
   find_action input patterns_and_parsers
 
-let read_action () : Action.action =
-  Action.Two Data.Blue
+let prompt_read_action () : unit =
+  ()
+
+let rec read_action () : Action.action =
+  prompt_read_action ();
+  match parse_action (read_line ()) with
+  | None -> read_action ()
+  | Some action -> action
