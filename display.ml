@@ -61,6 +61,7 @@ let rec parallel_prints (strings:string list list) : unit =
   print_newline () ;
   parallel_prints one_less_line
 
+(* Printing for Nobles *)
 let cost_lines (cost:Data.cost) : string list =
   let cost_line (color:Data.color) (n:int) (lines:string list) : string list =
     let line = Printf.sprintf "|   %s%d|" (Data.string_of_color color) n in
@@ -84,6 +85,7 @@ let fancy_print_nobles (nobles:Data.noble list) : unit =
   let all_lines = left_padding :: noble_lines in
   parallel_prints all_lines
 
+(* Printing for a Tier *)
 let deck_strings (stack:Data.card list) (header:string) : string list =
   let card_count = List.length stack in
   let count_line = Printf.sprintf "|%5d|" card_count in
@@ -110,6 +112,11 @@ let fancy_print_tier (deck:Data.card Board.deck) (header:string) : unit =
   in
   parallel_prints strings
 
+(* Printing for Tokens *)
+let fancy_print_tokens (tokens:Data.tokens) : unit =
+  ()
+
+(* Printing for Board *)
 let fancy_print_board (board:Board.board) : unit =
   fancy_print_nobles board.Board.nobles;
   print_newline ();
