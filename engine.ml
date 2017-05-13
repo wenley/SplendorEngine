@@ -7,7 +7,7 @@
  *   - Get player names
  *   - Make game object
  * - Game loop, for each player
- *   - Display state of the world
+ *   - Display state of the world (display.ml)
  *   - Read action
  *   - Validate action against board + player state
  *     - Translate from relative indexes to concrete data (cards)

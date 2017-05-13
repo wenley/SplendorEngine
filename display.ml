@@ -1,0 +1,105 @@
+
+(*
+Nobel:
++-----+
+|    3|
+|   K2|
+|   W2|
+|   R2|
++-----+
+
+Card:
++-----+
+|K   5|
+|   K1|
+|   G2|
+|   W2|
+|   R2|
+|   R2|
++-----+
+
+Deck:
++-----+
+|Cards|
+|10   |
+|     |
+|     |
+|     |
++-----+
+
+ *)
+let border = "+-----+"
+
+let rec pad (length:int) (padding:string) (strings:string list) =
+  let list_length = List.length strings in
+  if list_length >= length then strings
+  else
+    pad length padding (padding :: strings)
+
+let rec repeat_print (n:int) (s:string) : unit =
+  if n <= 0 then ()
+  else (print_string s ; repeat_print (n-1) s)
+
+let print_top_border (n:int) : unit =
+  repeat_print n border
+
+let rec parallel_prints (strings:string list list) : unit =
+  if List.length (List.hd strings) <= 0 then ()
+  else
+  let rec print_and_next (strings:string list) : string list =
+    match strings with
+    | [] -> []
+    | hd :: tl ->
+        print_string hd; tl
+  in
+  let one_less_line = List.map print_and_next strings in
+  print_newline () ;
+  parallel_prints one_less_line
+
+let print_noble_scores (nobles:Data.noble list) =
+  let print_score (noble:Data.noble) =
+    Printf.printf "|    %d|" noble.Data.score
+  in
+  List.iter print_score nobles
+
+let print_noble_costs (nobles:Data.noble list) : unit =
+  let noble_cost_lines : string list list =
+    let cost_line (color:Data.color) (n:int) (lines:string list) : string list =
+      let line = Printf.sprintf "|   %s%d|" (Data.string_of_color color) n in
+      line :: lines
+    in
+    let lines_for (noble:Data.noble) : string list =
+      let raw_lines = Data.ColorMap.fold cost_line noble.Data.cost [] in
+      pad 3 "|     |" raw_lines
+    in
+    List.map lines_for nobles
+  in
+  parallel_prints noble_cost_lines
+
+let fancy_print_nobles (nobles:Data.noble list) : unit =
+  let count = List.length nobles in
+  print_int count;
+  print_newline ();
+  print_top_border count ;
+  print_newline ();
+  print_noble_scores nobles ;
+  print_newline ();
+  print_noble_costs nobles ;
+  print_top_border count ;
+  print_newline ();
+  ()
+
+let fancy_print_tier (deck:Data.card Board.deck) : unit =
+  ()
+
+let fancy_print_board (board:Board.board) : unit =
+  ()
+
+(* testing *)
+;;
+
+let cost = Data.ColorMap.empty |> Data.ColorMap.add (Data.Blue) 2 in
+let noble = { Data.score=3; Data.cost=cost } in
+let nobles = noble :: noble :: [] in
+fancy_print_nobles nobles
+;;
