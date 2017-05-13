@@ -26,6 +26,11 @@ let string_of_token (token:token) =
   | Gold -> "Y"
   | Normal c -> string_of_color c
 
+let verbose_string_of_token (token:token) =
+  match token with
+  | Gold -> "Gold"
+  | Normal c -> verbose_string_of_color c
+
 module ColorOrder : (Map.OrderedType with type t = color) = struct
   type t = color
   let compare c1 c2 =
