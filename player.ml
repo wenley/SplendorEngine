@@ -77,14 +77,4 @@ let string_of_player (player:player) : string =
 
   let lines = name_string :: score_string :: token_string :: discount_string :: reserve_string :: [] in
   Globals.string_of_list (fun s -> s) "\n" lines
-;;
 
-(* Testing Code *)
-let player = {
-  name = "Me";
-  tokens = TokenMap.empty |> TokenMap.add (Normal Black) 2;
-  nobles = [];
-  cards = [];
-  reserved = [];
-} in
-Printf.printf "%s\n" (string_of_player player)

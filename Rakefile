@@ -57,25 +57,43 @@ end
 
 # Test executable = test_<>
 #   Defined below
-# Test build target = test/test_<>.cmx
+# Test source = test/<>_test.ml
+# Test build target = test/<>_test.cmx
 #   Covered by generic *.cmx rule
 # Task to execute = test:<>
 #   TODO
+#
+def test_executable(root)
+  "test_#{root}"
+end
+
+# Creates a naming convention of <filename>_test.ml
+def test_source(root)
+  "test/#{root}_test.ml"
+end
+
+def test_build(root)
+  "test/#{root}_test.cmx"
+end
 
 # Define tasks for tests
-# Creates a naming convention of test_<filename>.ml
 DEPENDENCIES.keys.each do |key|
-  test_file = "test_#{key}"
-
+  executable = test_executable(key)
   all_dependencies = expand_dependencies(key).map do |dependency|
     "#{dependency}.cmx"
-  end + ["test/#{test_file}.cmx"]
+  end + [test_build(key)]
 
   all_files = LIBRARIES + all_dependencies
 
-  task test_file => all_dependencies do |task|
-    execute "ocamlopt -o #{test_file} #{all_files.join(' ')}"
+  task executable => all_dependencies do |task|
+    execute "ocamlopt -o #{executable} #{all_files.join(' ')}"
   end
+
+  # TODO do this better
+  task "test:#{key}" => [executable] do |task|
+    puts execute "./#{executable}"
+  end
+  CLOBBER << executable
 end
 
 task :all => DEPENDENCIES.keys
