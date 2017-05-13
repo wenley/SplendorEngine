@@ -121,7 +121,7 @@ let fancy_print_tier (deck:Data.card Board.deck) (header:string) : unit =
   parallel_prints strings
 
 (* Printing for Tokens *)
-let fancy_print_tokens (tokens:Data.tokens) : unit =
+let fancy_print_tokens (tokens:Data.tokens) (header:string) : unit =
   let token_lines : string list =
     let add_token (token:Data.token) (count:int) (stack:string list) : string list =
       Printf.sprintf "%7s: %2d" (Data.verbose_string_of_token token) count :: stack
@@ -129,7 +129,7 @@ let fancy_print_tokens (tokens:Data.tokens) : unit =
     Data.TokenMap.fold add_token tokens [] in
   let header_lines : string list =
     let blank_line = "          " in
-    let header_line = Printf.sprintf "%10s" "Tokens:" in
+    let header_line = Printf.sprintf "%9s:" header in
     header_line :: (pad 5 blank_line [])
   in
   let all_lines = header_lines :: token_lines :: [] in
@@ -142,5 +142,5 @@ let fancy_print_board (board:Board.board) : unit =
   fancy_print_tier board.Board.three "Tier3";
   fancy_print_tier board.Board.two "Tier2";
   fancy_print_tier board.Board.one "Tier1";
-  fancy_print_tokens board.Board.tokens
+  fancy_print_tokens board.Board.tokens "Tokens"
 
