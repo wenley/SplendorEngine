@@ -8,6 +8,12 @@ type 'a deck = {
 
 type tier_level = One | Two | Three
 
+let int_of_tier (tier:tier_level) : int =
+  match tier with
+  | One -> 1
+  | Two -> 2
+  | Three -> 3
+
 let reveal_one (tier:'a deck) : 'a deck =
   let { deck=deck; revealed=revealed } = tier in
   match deck with

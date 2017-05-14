@@ -7,6 +7,7 @@ type 'a deck = {
 }
 
 type tier_level = One | Two | Three
+val int_of_tier : tier_level -> int
 
 val reveal_one : 'a deck -> 'a deck
 val reveal : int -> 'a deck -> 'a deck

@@ -27,34 +27,34 @@ let action_pattern =
 
 (* Parsers *)
 let color_at (index:int) (input:string) : Data.color =
-  match color_of_string (Str.matched_group index input) with
+  match Data.color_of_string (Str.matched_group index input) with
   | Some c -> c
-  | None -> failwith (Printf.sprintf "Input %s was matched, but didn't parse")
+  | None -> failwith (Printf.sprintf "Input %s was matched, but didn't parse" input)
 
 let tier_at (index:int) (input:string) : Board.tier_level =
   match Str.matched_group index input with
   | "1" -> Board.One
   | "2" -> Board.Two
   | "3" -> Board.Three
-  | _ -> failwith (Printf.sprintf "Input %s was matched, but didn't parse")
+  | _ -> failwith (Printf.sprintf "Input %s was matched, but didn't parse" input)
 
 let parse_three (input:string) =
-  let color1 = color_at 1 in
-  let color2 = color_at 2 in
-  let color3 = color_at 3 in
+  let color1 = color_at 1 input in
+  let color2 = color_at 2 input in
+  let color3 = color_at 3 input in
   Action.Three (color1, color2, color3)
 
 let parse_two (input:string) =
-  let color = color_at 1 in
+  let color = color_at 1 input in
   Action.Two (color)
 
 let parse_buy (input:string) =
-  let tier = tier_at 1 in
+  let tier = tier_at 1 input in
   let index = int_of_string (Str.matched_group 2 input) in
   Action.Buy (tier, index)
 
 let parse_reserve (input:string) =
-  let tier = tier_at 1 in
+  let tier = tier_at 1 input in
   let index = int_of_string (Str.matched_group 2 input) in
   Action.Reserve (tier, index)
 
@@ -71,7 +71,7 @@ let parsers = parse_three
 
 (* Aggregate Parser *)
 
-let patterns_and_parsers = List.zip regexes parsers
+let patterns_and_parsers = List.combine regexes parsers
 
 let rec find_action (input:string) pap : Action.action option =
   match pap with
