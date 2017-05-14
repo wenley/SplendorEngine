@@ -10,6 +10,8 @@ type player = {
 
 val empty_player : string -> player
 
+val reserve_card_at : player -> int -> Data.card option
+
 val add_noble : noble -> player -> player
 val add_card : card -> player -> player
 val add_reserved_card : card -> player -> player

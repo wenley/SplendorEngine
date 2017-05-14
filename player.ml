@@ -20,8 +20,11 @@ let add_card (card:card) (player:player) : player =
   { player with cards = card :: cards }
 
 let add_reserved_card (card:card) (player:player) : player =
-  let { reserved } = player in
-  { player with reserved = card :: reserved }
+  { player with reserved = card :: player.reserved }
+
+let reserve_card_at (player:player) (index:int) : card option =
+  try Some (List.nth player.reserved index)
+  with Invalid_argument(_) -> None
 
 let add_token (token:token) (player:player) : player =
   let { tokens } = player in
