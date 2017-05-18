@@ -1,9 +1,16 @@
 
 let enough_tokens (required:Data.tokens) (tokens:Data.tokens) : bool =
-  true
+  let tokens_has (token:Data.token) (count:int) : bool =
+    let tokens_value = try Some (Data.TokenMap.find token tokens) with Not_found -> None
+    in match count, tokens_value with
+    | 0, _ -> true
+    | _, None -> false
+    | needed, Some have -> needed <= have
+  in
+  Data.TokenMap.for_all tokens_has required
 
 let board_has (tokens:Data.tokens) (board:Board.board) : bool =
-  true
+  enough_tokens tokens board.Board.tokens
 
 let can_purchase (player:Player.player) (card:Data.card) : bool =
   true
