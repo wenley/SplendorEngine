@@ -49,14 +49,18 @@ let run_three_test (c1:color) (c2:color) (c3:color) (board_tokens:tokens) (expec
 ;;
 
 let three_test_cases =
-  (Red, Red, Red, TokenMap.empty, false)
-  :: (Red, Red, Blue, TokenMap.empty, false)
-  :: (Red, Green, Blue, TokenMap.empty, false)
-  :: (Red, Green, Blue, token_map_of (Normal Red :: Normal Green :: Normal Blue :: []), true)
-  :: (Red, Green, Blue, token_map_of (Gold :: Normal Green :: Normal Blue :: []), false)
+  (Red, Red, Red, [], false)
+  :: (Red, Red, Blue, [], false)
+  :: (Red, Green, Blue, [], false)
+  :: (Red, Green, Blue, Normal Red ::
+                        Normal Green ::
+                        Normal Blue :: [], true)
+  :: (Red, Green, Blue, Gold ::
+                        Normal Green ::
+                        Normal Blue :: [], false)
   :: []
 in let run_test (c1, c2, c3, board_tokens, expected) : unit =
-  run_three_test c1 c2 c3 board_tokens expected
+  run_three_test c1 c2 c3 (token_map_of board_tokens) expected
 in List.iter run_test three_test_cases
 ;;
 
@@ -82,12 +86,13 @@ let run_can_purchase_test (player_tokens:tokens) (card_cost:cost) (expected:bool
   | false -> message "FAILED"
 ;;
 
-let can_purchase_test_cases =
-  (token_map_of [], cost_of [], true)
-  :: (token_map_of [], cost_of (Red :: []), false)
+let can_purchase_test_cases : (token list * color list * bool) list =
+  ([], [], true)
+  :: ([], Red :: [], false)
+  :: (Gold :: [], Red :: [], true)
   :: []
 in let run_test (player_tokens, card_cost, expected) : unit =
-  run_can_purchase_test player_tokens card_cost expected
+  run_can_purchase_test (token_map_of player_tokens) (cost_of card_cost) expected
 in List.iter run_test can_purchase_test_cases
 ;;
 
