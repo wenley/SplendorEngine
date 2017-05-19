@@ -18,7 +18,6 @@ let rec cost_of (colors:color list) : cost =
   | hd :: tl -> cost_of tl |> ColorCounter.increment hd
 ;;
 
-
 let run_three_test (c1:color) (c2:color) (c3:color) (board_tokens:tokens) (expected:bool) : unit =
   let player = {
     name="";
@@ -34,8 +33,9 @@ let run_three_test (c1:color) (c2:color) (c3:color) (board_tokens:tokens) (expec
     nobles=[];
     tokens=board_tokens;
   } in
-  let message =
-    Printf.printf "%s%s%s vs %s on board %s\n"
+  let message result =
+    Printf.printf "%s : %s%s%s vs %s on board\n"
+    result
     (string_of_color c1)
     (string_of_color c2)
     (string_of_color c3)
@@ -45,7 +45,7 @@ let run_three_test (c1:color) (c2:color) (c3:color) (board_tokens:tokens) (expec
   let result = valid action player board in
   match result = expected with
   | true -> message "passed"
-  | false -> message "failed"
+  | false -> message "FAILED"
 ;;
 
 let three_test_cases =
@@ -70,15 +70,16 @@ let run_can_purchase_test (player_tokens:tokens) (card_cost:cost) (expected:bool
       reserved=[];
     } in
   let card = { score=0; color=Blue; cost=card_cost } in
-  let message =
-    Printf.printf "Player tokens %s vs. Card cost %s %s\n"
+  let message result =
+    Printf.printf "%s : Player tokens %s vs. Card cost %s\n"
+    result
     (verbose_string_of_tokens player_tokens)
     (verbose_string_of_cost card_cost)
   in
   let result = can_purchase player card in
   match result = expected with
   | true -> message "passed"
-  | false -> message "failed"
+  | false -> message "FAILED"
 ;;
 
 let can_purchase_test_cases =
