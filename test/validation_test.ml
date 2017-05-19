@@ -6,7 +6,7 @@ open Validation;;
 let empty_deck = { deck=[]; revealed=[] }
 ;;
 
-let three_test_case (c1:color) (c2:color) (c3:color) (board_tokens:tokens) (expected:bool) : unit =
+let run_three_test (c1:color) (c2:color) (c3:color) (board_tokens:tokens) (expected:bool) : unit =
   let player = {
     name="";
     tokens=TokenMap.empty;
@@ -49,11 +49,11 @@ let three_test_cases =
                         |> TokenMap.add (Normal Blue) 1, false)
   :: []
 in let run_test (c1, c2, c3, board_tokens, expected) : unit =
-  three_test_case c1 c2 c3 board_tokens expected
+  run_three_test c1 c2 c3 board_tokens expected
 in List.iter run_test three_test_cases
 ;;
 
-let can_purchase_test_case (player_tokens:tokens) (card_cost:cost) (expected:bool) : unit =
+let run_can_purchase_test (player_tokens:tokens) (card_cost:cost) (expected:bool) : unit =
   let player =
     {
       name="test";
@@ -72,5 +72,15 @@ let can_purchase_test_case (player_tokens:tokens) (card_cost:cost) (expected:boo
   match result = expected with
   | true -> message "passed"
   | false -> message "failed"
+;;
+
+let can_purchase_test_cases =
+  (TokenMap.empty, ColorMap.empty, true)
+  :: (TokenMap.empty, ColorMap.empty |> ColorMap.add Red 1, false)
+  :: []
+in let run_test (player_tokens, card_cost, expected) : unit =
+  run_can_purchase_test player_tokens card_cost expected
+in List.iter run_test can_purchase_test_cases
+;;
 
 
