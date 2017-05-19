@@ -52,12 +52,15 @@ let three_test_cases =
   (Red, Red, Red, [], false)
   :: (Red, Red, Blue, [], false)
   :: (Red, Green, Blue, [], false)
-  :: (Red, Green, Blue, Normal Red ::
-                        Normal Green ::
-                        Normal Blue :: [], true)
-  :: (Red, Green, Blue, Gold ::
-                        Normal Green ::
-                        Normal Blue :: [], false)
+  :: (Red, Green, Blue,
+     Normal Red :: Normal Green :: Normal Blue :: [],
+     true)
+  :: (Red, Green, Blue,
+     Gold :: Normal Green :: Normal Blue :: [],
+     false)
+  :: (Red, Green, Blue,
+     Normal Red :: Normal Red :: Normal Green :: Normal Green :: Normal Blue :: Normal Blue :: [],
+     true)
   :: []
 in let run_test (c1, c2, c3, board_tokens, expected) : unit =
   run_three_test c1 c2 c3 (token_map_of board_tokens) expected
@@ -90,6 +93,7 @@ let can_purchase_test_cases : (token list * color list * bool) list =
   ([], [], true)
   :: ([], Red :: [], false)
   :: (Gold :: [], Red :: [], true)
+  :: (Normal Red :: Gold :: [], Red :: [], true)
   :: []
 in let run_test (player_tokens, card_cost, expected) : unit =
   run_can_purchase_test (token_map_of player_tokens) (cost_of card_cost) expected
