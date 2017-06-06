@@ -107,7 +107,7 @@ List.iter run_test two_test_cases
 
 let run_can_purchase_test (player_tokens:tokens) (card_cost:cost) (expected:bool) : unit =
   let player = { empty_player with tokens=player_tokens } in
-  let card = { score=0; color=Blue; cost=card_cost } in
+  let card = { empty_card with cost=card_cost } in
   let message result =
     Printf.printf "%s : Player tokens %s vs. Card cost %s\n"
     result
@@ -134,8 +134,10 @@ List.iter run_test can_purchase_test_cases
 
 let run_reserve_test (reserved:card list) (expected:bool) : unit =
   let player = { empty_player with reserved=reserved } in
-  let deck = { empty_deck with revealed=empty_card::[] } in
-  let board = { empty_board with one=deck } in
+  let board =
+    let deck = { empty_deck with revealed=empty_card::[] } in
+    { empty_board with one=deck }
+  in
   let message result =
     Printf.printf "%s : Player with %d reserved\n"
     result
