@@ -4,6 +4,8 @@ open Board;;
 open Process;;
 open Shared;;
 
+(* Test Take Three Action *)
+
 let run_process_three_test c1 c2 c3
   (before_player:tokens) (after_player:tokens)
   (before_board:tokens) (after_board:tokens) : unit =
@@ -48,6 +50,8 @@ run_process_three_test Red Green Blue before_player after_player before_board
 after_board
 ;;
 
+(* Test Take Two Action *)
+
 let run_process_two_test color before_player after_player before_board
   after_board : unit =
   let player = { empty_player with tokens=before_player } in
@@ -91,4 +95,44 @@ let before_board = (token_map_of (Normal Red :: Normal Red :: Normal Red ::
   Normal Red :: [])) in
 let after_board = after_player in
 run_process_two_test Red before_player after_player before_board after_board
+;;
+
+(* Test Buy Action *)
+
+let run_process_buy_test card before_player after_player before_board
+after_board : unit =
+  let new_player, new_board = process_buy card before_player before_board in
+  let message result =
+    Printf.printf "%s:\n  Player %s vs %s\n  Board %s vs %s\n\n"
+    result
+    (string_of_player new_player)
+    (string_of_player after_player)
+    (string_of_board new_board)
+    (string_of_board after_board)
+  in
+  match (after_player = new_player && after_board = new_board) with
+  | true -> Printf.printf "passed : buy test\n"
+  | false -> message "FAILED"
+;;
+
+let card =
+  let cost = cost_of (Red :: Red :: []) in
+  { empty_card with cost=cost }
+in
+let before_player =
+  let cards = { empty_card with color=Red } :: [] in
+  let tokens = token_map_of (Normal Red :: []) in
+  { empty_player with cards=cards; tokens=tokens }
+in
+let after_player =
+  let cards = card :: before_player.cards in
+  let tokens = token_map_of [] in
+  { empty_player with cards=cards; tokens=tokens }
+in
+let before_board = empty_board in
+let after_board =
+  let tokens = token_map_of (Normal Red :: []) in
+  { empty_board with tokens=tokens }
+in
+run_process_buy_test card before_player after_player before_board after_board
 ;;

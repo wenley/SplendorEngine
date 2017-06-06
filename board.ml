@@ -86,5 +86,11 @@ let string_of_board (board:board) : string =
   let two_string = string_of_tier two in
   let three_string = string_of_tier three in
   let noble_string = string_of_list string_of_noble "\n" nobles in
-  Printf.sprintf "Tier 1: %s\nTier 2: %s\nTier 3: %s\nNobles: %s" one_string two_string three_string noble_string
+  let tokens_string = verbose_string_of_tokens tokens in
+  Printf.sprintf "Tier 1: %s\nTier 2: %s\nTier 3: %s\nNobles: %s\nTokens: %s"
+  one_string
+  two_string
+  three_string
+  noble_string
+  tokens_string
 
