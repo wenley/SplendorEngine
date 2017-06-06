@@ -33,7 +33,7 @@ let rec discard_token (player:player) : player =
   | Some token ->
       let has_key = TokenMap.exists (fun t -> fun _ -> t = token) player.tokens in
       if has_key then
-        use_token token player
+        { player with tokens=TokenCounter.decrement token player.tokens }
       else
         (Printf.printf "You have no %s tokens\n" (string_of_token token);
         discard_token player)

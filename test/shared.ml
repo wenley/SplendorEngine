@@ -4,14 +4,7 @@ let empty_card = { Data.score=0; Data.color=Data.Blue; Data.cost=Data.ColorMap.e
 let empty_deck = { Board.deck=[]; Board.revealed=[] }
 ;;
 
-let empty_player =
-  {
-    Player.name="";
-    Player.tokens=Data.TokenMap.empty;
-    Player.nobles=[];
-    Player.cards=[];
-    Player.reserved=[];
-  }
+let empty_player = Player.empty_player ""
 let empty_board =
   {
     Board.one=empty_deck;

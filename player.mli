@@ -9,18 +9,11 @@ type player = {
 }
 
 val empty_player : string -> player
-
 val reserve_card_at : int -> player -> Data.card option
-
-val add_noble : noble -> player -> player
-val add_card : card -> player -> player
-val add_reserved_card : card -> player -> player
-val add_token : token -> player -> player
-val use_token : token -> player -> player
 
 (* Should only be used during a purchase action,
  * in tandem with balancing tokens and adding the card back *)
-val remove_reserved : int -> player -> player
+val remove_reserved : int -> player -> (Data.card option * player)
 
 val total_discount : player -> cost
 val score_for_player : player -> int
