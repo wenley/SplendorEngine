@@ -3,6 +3,9 @@ open Player;;
 open Board;;
 open Validation;;
 
+let empty_card = { score=0; color=Blue; cost=ColorMap.empty }
+;;
+
 let empty_deck = { deck=[]; revealed=[] }
 ;;
 
@@ -69,7 +72,8 @@ let three_test_cases =
   :: []
 in let run_test (c1, c2, c3, board_tokens, expected) : unit =
   run_three_test c1 c2 c3 (token_map_of board_tokens) expected
-in List.iter run_test three_test_cases
+in Printf.printf "\nThree test cases:\n";
+List.iter run_test three_test_cases
 ;;
 
 let run_two_test (color:color) (board_tokens:tokens) (expected:bool) : unit =
@@ -97,7 +101,8 @@ let two_test_cases =
 ;;
 let run_test (color, board_tokens, expected) : unit =
   run_two_test color (token_map_of board_tokens) expected
-in List.iter run_test two_test_cases
+in Printf.printf "\nTwo test cases:\n";
+List.iter run_test two_test_cases
 ;;
 
 let run_can_purchase_test (player_tokens:tokens) (card_cost:cost) (expected:bool) : unit =
@@ -123,6 +128,35 @@ let can_purchase_test_cases : (token list * color list * bool) list =
   :: []
 in let run_test (player_tokens, card_cost, expected) : unit =
   run_can_purchase_test (token_map_of player_tokens) (cost_of card_cost) expected
-in List.iter run_test can_purchase_test_cases
+in Printf.printf "can_purchase test cases:\n";
+List.iter run_test can_purchase_test_cases
+;;
+
+let run_reserve_test (reserved:card list) (expected:bool) : unit =
+  let player = { empty_player with reserved=reserved } in
+  let deck = { empty_deck with revealed=empty_card::[] } in
+  let board = { empty_board with one=deck } in
+  let message result =
+    Printf.printf "%s : Player with %d reserved\n"
+    result
+    (List.length reserved)
+  in
+  let action = Action.Reserve (One, 0) in
+  let result = valid action player board in
+  match result = expected with
+  | true -> message "passed"
+  | false -> message "FAILED"
+;;
+
+let reserve_test_cases =
+  ([], true)
+  :: (empty_card :: [], true)
+  :: (empty_card :: empty_card :: [], true)
+  :: (empty_card :: empty_card :: empty_card :: [], false)
+  :: []
+in let run_test (reserved_cards, expected) : unit =
+  run_reserve_test reserved_cards expected
+in Printf.printf "\nReserve test cases:\n";
+List.iter run_test reserve_test_cases
 ;;
 
