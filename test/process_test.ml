@@ -187,3 +187,8 @@ let after_board = empty_board in
 run_process_reserve_test before_player after_player before_board after_board
 ;;
 
+(* Test ReserveBuy Action *)
+
+let run_process_reserve_buy_test card before_player after_player before_board
+after_board : unit =
+  ()

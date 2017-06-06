@@ -100,5 +100,11 @@ let process_action action player board =
       | None, _ -> raise (Invalid_argument "Reserve action should be validated")
       | Some card, board -> process_reserve card player board
       )
-  | _ -> (player, board)
+  | Action.ReserveBuy (index) ->
+      (match Player.reserve_card_at index player with
+      | None -> raise (Invalid_argument "ReserveBuy action should be validated")
+      | Some card ->
+          let player = Player.remove_reserved index player in
+          process_buy card player board
+      )
 
