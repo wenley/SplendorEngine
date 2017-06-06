@@ -6,6 +6,23 @@ open Validation;;
 let empty_deck = { deck=[]; revealed=[] }
 ;;
 
+let empty_player =
+  {
+    name="";
+    tokens=TokenMap.empty;
+    nobles=[];
+    cards=[];
+    reserved=[];
+  }
+let empty_board =
+  {
+    one=empty_deck;
+    two=empty_deck;
+    three=empty_deck;
+    nobles=[];
+    tokens=TokenMap.empty;
+  }
+
 let rec token_map_of (tokens:token list) : tokens =
   match tokens with
   | [] -> TokenMap.empty
@@ -19,20 +36,8 @@ let rec cost_of (colors:color list) : cost =
 ;;
 
 let run_three_test (c1:color) (c2:color) (c3:color) (board_tokens:tokens) (expected:bool) : unit =
-  let player = {
-    name="";
-    tokens=TokenMap.empty;
-    nobles=[];
-    cards=[];
-    reserved=[];
-  } in
-  let board = {
-    one=empty_deck;
-    two=empty_deck;
-    three=empty_deck;
-    nobles=[];
-    tokens=board_tokens;
-  } in
+  let player = empty_player in
+  let board = { empty_board with tokens = board_tokens } in
   let message result =
     Printf.printf "%s : %s%s%s vs %s on board\n"
     result
@@ -67,6 +72,34 @@ in let run_test (c1, c2, c3, board_tokens, expected) : unit =
 in List.iter run_test three_test_cases
 ;;
 
+let run_two_test (color:color) (board_tokens:tokens) (expected:bool) : unit =
+  let player = empty_player in
+  let board = { empty_board with tokens=board_tokens } in
+  let message result =
+    Printf.printf "%s : %s vs %s on board\n" result
+    (string_of_color color)
+    (verbose_string_of_tokens board_tokens)
+  in
+  let action = Action.Two(color) in
+  let result = valid action player board in
+  match result = expected with
+  | true -> message "passed"
+  | false -> message "FAILED"
+
+let two_test_cases = 
+  (Red, [], false)
+  :: (Red, Normal Red :: [], false)
+  :: (Red, Normal Red :: Normal Red :: [], false)
+  :: (Red, Normal Red :: Normal Red :: Normal Red :: [], false)
+  :: (Red, Normal Red :: Normal Red :: Normal Red :: Normal Red :: [], true)
+  :: (Red, Normal Red :: Normal Red :: Normal Red :: Normal Red :: Normal Red :: [], true)
+  :: []
+;;
+let run_test (color, board_tokens, expected) : unit =
+  run_two_test color (token_map_of board_tokens) expected
+in List.iter run_test two_test_cases
+;;
+
 let run_can_purchase_test (player_tokens:tokens) (card_cost:cost) (expected:bool) : unit =
   let player =
     {
@@ -99,5 +132,4 @@ in let run_test (player_tokens, card_cost, expected) : unit =
   run_can_purchase_test (token_map_of player_tokens) (cost_of card_cost) expected
 in List.iter run_test can_purchase_test_cases
 ;;
-
 
