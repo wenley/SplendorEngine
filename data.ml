@@ -51,6 +51,19 @@ module TokenCounter = Globals.Counter(TokenMap)
 type cost = int ColorMap.t
 type tokens = int TokenMap.t
 
+let apply_discount (discount:cost) (cost:cost) : cost =
+  let apply (color:color) (count:int) (cost:cost) : cost =
+    (* No discount to apply *)
+    if count <= 0 then cost else
+    try
+      let value_before = ColorMap.find color cost in
+      let value_after = value_before - count in
+      let value = if value_after < 0 then 0 else value_after in
+      ColorMap.add color value cost
+    with Not_found -> cost (* Key not in cost; no discount needed *)
+  in
+  ColorMap.fold apply discount cost
+
 let verbose_string_of_cost (cost:cost) =
   let add_color (color:color) (count:int) s =
     let color_string = verbose_string_of_color color in

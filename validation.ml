@@ -19,21 +19,9 @@ let tokens_cover (required:Data.cost) (tokens:Data.tokens) : bool =
 let board_has (tokens:Data.tokens) (board:Board.board) : bool =
   enough_tokens tokens board.Board.tokens
 
-let apply_discount (discount:Data.cost) (cost:Data.cost) : Data.cost =
-  let apply (color:Data.color) (count:int) (cost:Data.cost) : Data.cost =
-    if count <= 0 then cost else
-    try
-      let value_before = Data.ColorMap.find color cost in
-      let value_after = value_before - count in
-      let value = if value_after < 0 then 0 else value_after in
-      Data.ColorMap.add color value cost
-    with Not_found -> cost
-  in
-  Data.ColorMap.fold apply discount cost
-
 let can_purchase (player:Player.player) (card:Data.card) : bool =
   let discount = Player.total_discount player in
-  let discounted_cost = apply_discount discount card.Data.cost in
+  let discounted_cost = Data.apply_discount discount card.Data.cost in
   tokens_cover discounted_cost player.Player.tokens
 
 let valid action player board =
