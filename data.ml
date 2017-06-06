@@ -64,6 +64,29 @@ let apply_discount (discount:cost) (cost:cost) : cost =
   in
   ColorMap.fold apply discount cost
 
+(* Straight mapping of Color keys to Token keys *)
+let tokens_of_cost cost : tokens =
+  let convert (color:color) (count:int) (tokens:tokens) : tokens =
+    TokenMap.add (Normal color) count tokens
+  in ColorMap.fold convert cost TokenMap.empty
+
+(**
+ * Given a cap on tokens and the tokens required,
+ * return the capped token counts along with the Gold tokens required
+ *)
+let cover_with_golds (cap:tokens) (need:tokens) : (tokens * int) =
+  let apply (token:token) (needed:int) (tokens_used, golds) =
+    let have_count =
+      try TokenMap.find token cap
+      with Not_found -> 0
+    in
+    let used = min needed have_count in
+    let golds_needed = needed - used in
+    let new_tokens = TokenMap.add token used tokens_used in
+    (new_tokens, golds + golds_needed)
+  in
+  TokenMap.fold apply need (TokenMap.empty, 0)
+
 let verbose_string_of_cost (cost:cost) =
   let add_color (color:color) (count:int) s =
     let color_string = verbose_string_of_color color in

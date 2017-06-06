@@ -7,13 +7,12 @@ let enough_tokens (required:Data.tokens) (tokens:Data.tokens) : bool =
   Data.TokenMap.for_all tokens_has required
 
 let tokens_cover (required:Data.cost) (tokens:Data.tokens) : bool =
-  let tokens_short (color:Data.color) (count:int) (sum:int) : int =
-    let tokens_value = try Data.TokenMap.find (Data.Normal color) tokens with Not_found -> 0
-    in if count <= tokens_value then sum
-    else (sum + count - tokens_value)
+  let token_cost = Data.tokens_of_cost required in
+  let _, golds_needed = Data.cover_with_golds tokens token_cost in
+  let golds_have =
+    try Data.TokenMap.find Data.Gold tokens
+    with Not_found -> 0
   in
-  let golds_needed = Data.ColorMap.fold tokens_short required 0 in
-  let golds_have = try Data.TokenMap.find Data.Gold tokens with Not_found -> 0 in
   golds_needed <= golds_have
 
 let board_has (tokens:Data.tokens) (board:Board.board) : bool =
