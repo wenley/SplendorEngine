@@ -36,7 +36,11 @@ end = struct
 
   let increment = apply_delta 1
 
-  let decrement = apply_delta (-1)
+  let decrement key map =
+    let positive_value (_:MapType.key) (value:int) : bool =
+      value > 0
+    in
+    apply_delta (-1) key map |> MapType.filter positive_value
 end
 
 let string_of_list (string_of:'a -> string) (joiner:string) (items:'a list) : string =
