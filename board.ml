@@ -15,10 +15,9 @@ let int_of_tier (tier:tier_level) : int =
   | Three -> 3
 
 let reveal_one (tier:'a deck) : 'a deck =
-  let { deck=deck; revealed=revealed } = tier in
-  match deck with
+  match tier.deck with
   | [] -> tier
-  | card :: deck -> { deck=deck; revealed=card::revealed }
+  | card :: deck -> { deck=deck; revealed=card::tier.revealed }
 
 let rec reveal (n:int) (tier:'a deck) : 'a deck =
   if n <= 0 then tier
@@ -48,8 +47,7 @@ let card_at (level:tier_level) (index:int) (board:board) : card option =
     | (n, hd::tl) -> item_at (n-1) tl
   in
   let nth_card (index:int) (tier:card deck) : card option =
-    let { revealed=cards } = tier in
-    item_at index cards
+    item_at index tier.revealed
   in
   let tier = tier_for_board level board in
   nth_card index tier
@@ -64,8 +62,7 @@ let claim_card_at (level:tier_level) (index:int) (board:board) : (card option * 
   | None -> (None, board)
   | Some card ->
       let tier = tier_for_board level board in
-      let { revealed } = tier in
-      let new_revealed = List.filter ((<>) card) revealed in
+      let new_revealed = List.filter ((<>) card) tier.revealed in
       let new_tier = reveal_one { tier with revealed = new_revealed } in
       let new_board = match level with
       | One -> { board with one = new_tier }
@@ -75,18 +72,16 @@ let claim_card_at (level:tier_level) (index:int) (board:board) : (card option * 
       (Some card, new_board)
 
 let string_of_tier (tier:card deck) : string =
-  let { deck; revealed } = tier in
-  let deck_depth = List.length deck in
-  let board_2 = string_of_list verbose_string_of_card "\n" revealed in
+  let deck_depth = List.length tier.deck in
+  let board_2 = string_of_list verbose_string_of_card "\n" tier.revealed in
   Printf.sprintf "(%d cards remaining)%s" deck_depth board_2
 
 let string_of_board (board:board) : string =
-  let { one; two; three; nobles; tokens } = board in
-  let one_string = string_of_tier one in
-  let two_string = string_of_tier two in
-  let three_string = string_of_tier three in
-  let noble_string = string_of_list string_of_noble "\n" nobles in
-  let tokens_string = verbose_string_of_tokens tokens in
+  let one_string = string_of_tier board.one in
+  let two_string = string_of_tier board.two in
+  let three_string = string_of_tier board.three in
+  let noble_string = string_of_list string_of_noble "\n" board.nobles in
+  let tokens_string = verbose_string_of_tokens board.tokens in
   Printf.sprintf "Tier 1: %s\nTier 2: %s\nTier 3: %s\nNobles: %s\nTokens: %s"
   one_string
   two_string
