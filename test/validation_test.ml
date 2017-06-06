@@ -101,14 +101,7 @@ in List.iter run_test two_test_cases
 ;;
 
 let run_can_purchase_test (player_tokens:tokens) (card_cost:cost) (expected:bool) : unit =
-  let player =
-    {
-      name="test";
-      tokens=player_tokens;
-      nobles=[];
-      cards=[];
-      reserved=[];
-    } in
+  let player = { empty_player with tokens=player_tokens } in
   let card = { score=0; color=Blue; cost=card_cost } in
   let message result =
     Printf.printf "%s : Player tokens %s vs. Card cost %s\n"

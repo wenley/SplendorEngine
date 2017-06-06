@@ -59,7 +59,7 @@ let valid action player board =
       let reserved_count = List.length player.Player.reserved in
       reserved_count < 3
   | Action.ReserveBuy index ->
-      (match Player.reserve_card_at player index with
+      (match Player.reserve_card_at index player with
       | None -> false
       | Some card_wanted -> can_purchase player card_wanted
       )

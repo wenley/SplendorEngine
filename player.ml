@@ -22,7 +22,7 @@ let add_card (card:card) (player:player) : player =
 let add_reserved_card (card:card) (player:player) : player =
   { player with reserved = card :: player.reserved }
 
-let reserve_card_at (player:player) (index:int) : card option =
+let reserve_card_at (index:int) (player:player) : card option =
   try Some (List.nth player.reserved index)
   with Invalid_argument(_) -> None
 
