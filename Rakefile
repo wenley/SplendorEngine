@@ -91,7 +91,7 @@ DEPENDENCIES.keys.each do |key|
   executable = test_executable(key)
   all_dependencies = expand_dependencies(key).map do |dependency|
     "#{dependency}.cmx"
-  end + [test_build(key)]
+  end + ['test/shared.cmx', test_build(key)]
 
   all_files = LIBRARIES + all_dependencies
 
@@ -109,7 +109,7 @@ end
 task :all => DEPENDENCIES.keys
 
 rule '.cmx' => ['.ml', '.cmi'] do |task|
-  execute "ocamlopt -c #{task.source}"
+  execute "ocamlopt -c #{task.source} -I test"
 end
 CLEAN.include(SOURCE_FILES.ext('.cmx'))
 CLEAN.include(TEST_FILES.ext('.cmx'))
@@ -126,7 +126,7 @@ def source_for_interface(filename)
 end
 
 rule '.cmi' => ->(f){ source_for_interface(f) } do |task|
-  execute "ocamlopt -c #{task.source}"
+  execute "ocamlopt -c #{task.source} -I test"
 end
 
 CLEAN.include(INTERFACE_FILES.ext('.cmi'))
