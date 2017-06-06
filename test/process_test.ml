@@ -136,3 +136,54 @@ let after_board =
 in
 run_process_buy_test card before_player after_player before_board after_board
 ;;
+
+(* Test Reserve Action *)
+let run_process_reserve_test before_player after_player before_board after_board
+: unit =
+  let action = Action.Reserve(One, 0) in
+  let new_player, new_board =
+    process_action action before_player before_board
+  in
+  let message result =
+    Printf.printf "%s:\n  Player %s vs %s\n  Board %s vs %s\n\n"
+    result
+    (string_of_player new_player)
+    (string_of_player after_player)
+    (string_of_board new_board)
+    (string_of_board after_board)
+  in
+  match (after_player = new_player && after_board = new_board) with
+  | true -> Printf.printf "passed : reserve test\n"
+  | false -> message "FAILED"
+;;
+
+(* Also gets a gold token *)
+let before_player = empty_player in
+let after_player =
+  let reserved = empty_card::[] in
+  let tokens = token_map_of (Gold :: []) in
+  { empty_player with reserved=reserved; tokens=tokens }
+in
+let before_board =
+  let tier = { deck=[]; revealed=empty_card::[] } in
+  let tokens = token_map_of (Gold :: []) in
+  { empty_board with one=tier; tokens=tokens }
+in
+let after_board = empty_board in
+run_process_reserve_test before_player after_player before_board after_board
+;;
+
+(* No Gold tokens to take *)
+let before_player = empty_player in
+let after_player =
+  let reserved = empty_card::[] in
+  { empty_player with reserved=reserved }
+in
+let before_board =
+  let tier = { deck=[]; revealed=empty_card::[] } in
+  { empty_board with one=tier }
+in
+let after_board = empty_board in
+run_process_reserve_test before_player after_player before_board after_board
+;;
+

@@ -62,6 +62,28 @@ let process_buy card player board =
   in
   (new_player, new_board)
 
+let process_reserve card player board =
+  let has_gold =
+    try Data.TokenMap.find Data.Gold board.Board.tokens > 0
+    with Not_found -> false
+  in
+  let new_player =
+    let new_reserved = card :: player.Player.reserved in
+    let new_tokens =
+      if has_gold then Data.TokenCounter.increment Data.Gold player.Player.tokens
+      else player.Player.tokens
+    in
+    { player with Player.reserved=new_reserved; Player.tokens=new_tokens }
+  in
+  let new_board =
+    let new_tokens =
+      if has_gold then Data.TokenCounter.decrement Data.Gold board.Board.tokens
+      else board.Board.tokens
+    in
+    { board with Board.tokens=new_tokens }
+  in
+  (new_player, new_board)
+
 let process_action action player board =
   match action with
   | Action.Three (c1, c2, c3) ->
@@ -72,6 +94,11 @@ let process_action action player board =
       (match Board.claim_card_at level index board with
       | None, _ -> raise (Invalid_argument "Buy action should be validated")
       | Some card, board -> process_buy card player board
+      )
+  | Action.Reserve (level, index) ->
+      (match Board.claim_card_at level index board with
+      | None, _ -> raise (Invalid_argument "Reserve action should be validated")
+      | Some card, board -> process_reserve card player board
       )
   | _ -> (player, board)
 
