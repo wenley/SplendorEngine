@@ -21,6 +21,7 @@ DEPENDENCIES = {
   read: [:parse],
   prompt: [:data, :action],
   cleanup: [:player, :board, :display],
+  winner: [:player],
 
   # Update game state
   validation: [:action, :player, :board],
