@@ -20,6 +20,10 @@
  * - After each full loop, check for end of game (game.ml, engine.ml)
  *)
 
+(**
+ * Given a player and a board state, let the player take a turn and
+ * return the updated player and board states.
+ *)
 let rec player_turn (player:Player.player) (board:Board.board) : (Player.player * Board.board) =
   Display.fancy_print_board board;
   Player.print_player player;
@@ -34,6 +38,10 @@ let rec player_turn (player:Player.player) (board:Board.board) : (Player.player 
       let player = Cleanup.discard_tokens player in
       (player, board)
 
+(**
+ * Given the current state of the game with all players having taken the same
+ * number of turns, allow all players to take one more round of turns.
+ *)
 let play_round (game:Game.game) : Game.game =
   (**
    * Players are independent; therefore, can map over "old" values, update at end
@@ -48,6 +56,10 @@ let play_round (game:Game.game) : Game.game =
   let new_players, new_game = List.fold_left process_turn ([], game) game.Game.players in
   { new_game with Game.players=new_players }
 
+(**
+ * Given a starting game state, allow all players to take turns until the game
+ * in finished.
+ *)
 let rec play (game:Game.game) : Game.game =
   match Game.game_over game with
   | true -> game
