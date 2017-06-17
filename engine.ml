@@ -24,6 +24,7 @@
  * Given a player and a board state, let the player take a turn and
  * return the updated player and board states.
  *)
+
 let rec player_turn (player:Player.player) (board:Board.board) : (Player.player * Board.board) =
   Display.fancy_print_board board;
   Player.print_player player;
@@ -64,3 +65,6 @@ let rec play (game:Game.game) : Game.game =
   match Game.game_over game with
   | true -> game
   | false -> play (play_round game)
+
+module Engine (G:Game) : Engine = struct
+end
