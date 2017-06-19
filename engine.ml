@@ -66,5 +66,8 @@ let rec play (game:Game.game) : Game.game =
   | true -> game
   | false -> play (play_round game)
 
-module Engine (G:Game) : Engine = struct
+module type Engine = sig
+end
+
+module RealEngine (G:Game.Game) : Engine = struct
 end

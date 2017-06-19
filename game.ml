@@ -7,16 +7,11 @@ type game = {
 let game_over (game:game) : bool =
   List.exists (fun p -> Player.score_for_player p >= 15) game.players
 
-let Game = sig
+module type Game = sig
   val game_over : game -> bool
 end
 
 module DefaultGame : Game = struct
-  type game = {
-    players: Player.player list;
-    board: Board.board;
-  }
-
   let game_over (game:game) : bool =
     List.exists (fun p -> Player.score_for_player p >= 15) game.players
 end
