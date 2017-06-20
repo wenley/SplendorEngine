@@ -19,11 +19,8 @@
  *     - Put back tokens
  * - After each full loop, check for end of game (game.ml, engine.ml)
  *)
-module type Engine = sig
-  val play : Game.game -> Game.game
-end
 
-module RealEngine (G:Game.Game) : Engine = struct
+module Engine (G:Game.Game) : Engine = struct
   (**
    * Given a player and a board state, let the player take a turn and
    * return the updated player and board states.
@@ -69,3 +66,5 @@ module RealEngine (G:Game.Game) : Engine = struct
     | true -> game
     | false -> play (play_round game)
 end
+
+module RealEngine = Engine(Game.DefaultGame)
