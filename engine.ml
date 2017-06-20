@@ -19,21 +19,11 @@
  *     - Put back tokens
  * - After each full loop, check for end of game (game.ml, engine.ml)
  *)
-
 module type Engine = sig
   val play : Game.game -> Game.game
 end
 
 module RealEngine (G:Game.Game) : Engine = struct
-  (**
-   * Given a starting game state, allow all players to take turns until the game
-   * in finished.
-   *)
-  let rec play (game:Game.game) : Game.game =
-    match G.game_over game with
-    | true -> game
-    | false -> play (play_round game)
-
   (**
    * Given a player and a board state, let the player take a turn and
    * return the updated player and board states.
@@ -69,4 +59,13 @@ module RealEngine (G:Game.Game) : Engine = struct
     in
     let new_players, new_game = List.fold_left process_turn ([], game) game.Game.players in
     { new_game with Game.players=new_players }
+
+  (**
+   * Given a starting game state, allow all players to take turns until the game
+   * in finished.
+   *)
+  let rec play (game:Game.game) : Game.game =
+    match G.game_over game with
+    | true -> game
+    | false -> play (play_round game)
 end

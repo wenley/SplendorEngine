@@ -2,7 +2,7 @@ module type Splendor = sig
   val play : unit -> unit
 end
 
-module Splendor (Start:Start) (Engine:Engine.Engine) : Splendor = struct
+module Splendor (Start:Start.Start) (Engine:Engine.Engine) : Splendor = struct
   let play () =
     let initial_game = Start.start_game () in
     let end_game = Engine.play initial_game in
@@ -10,7 +10,7 @@ module Splendor (Start:Start) (Engine:Engine.Engine) : Splendor = struct
     Winner.display_winner winning_player
 end
 
-module RealSplendor = Splendor(Start)(Engine.RealEngine)
+module RealSplendor = Splendor(Start.RealStart)(Engine.RealEngine)
 ;;
 
 RealSplendor.play ()

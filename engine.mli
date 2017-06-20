@@ -1,3 +1,3 @@
-
-val play_round : Game.game -> Game.game
-val play : Game.game -> Game.game
+module type Engine = sig
+  val play : Game.game -> Game.game
+end
