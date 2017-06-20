@@ -30,6 +30,9 @@ DEPENDENCIES = {
   # High-level modules
   start: [:board, :read, :shuffle, :game],
   engine: [:start, :prompt, :validation, :process, :cleanup],
+
+  # Full game module
+  splendor: [:start, :engine, :winner],
 }
 
 SOURCE_FILES = Rake::FileList.new('*.ml') do |fl|
