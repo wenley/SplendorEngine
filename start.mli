@@ -1,3 +1,5 @@
 
-val start_nobles : int -> Data.noble list
-val start_game : unit -> Game.game
+module type Start = sig
+  val start_game : unit -> Game.game
+end
+
