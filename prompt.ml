@@ -85,7 +85,12 @@ let parse_action (input:string) =
   find_action input patterns_and_parsers
 
 let prompt_read_action () : unit =
-  ()
+  Printf.printf "Please enter an action. Action formats:\n";
+  Printf.printf "  Take 3 Tokens: 3<color><color><color> (e.g. 3RGB)\n";
+  Printf.printf "  Take 2 Tokens: 2<color> (e.g. 2K)\n";
+  Printf.printf "  Buy a Card: B<tier><index> (e.g. B11)\n";
+  Printf.printf "  Reserve a Card: R<tier><index> (e.g. R11)\n";
+  Printf.printf "  Buy a Card from Reserve: X<index> (e.g. X2)\n"
 
 let rec read_action () : Action.action =
   prompt_read_action ();

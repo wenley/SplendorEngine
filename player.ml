@@ -61,7 +61,7 @@ let string_of_player (player:player) : string =
   let token_string = "Tokens: " ^ (verbose_string_of_tokens player.tokens) in
   let discount_string = "Card Discounts: " ^ (verbose_string_of_cost (total_discount player)) in
   let reserve_string =
-    "Reserved Cards: " ^
+    Printf.sprintf "Reserved Cards: %s\n"
     (Globals.string_of_list verbose_string_of_card "\n" player.reserved)
   in
   let lines = name_string :: score_string :: token_string :: discount_string :: reserve_string :: [] in
