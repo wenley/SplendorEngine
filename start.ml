@@ -1,7 +1,11 @@
 open Data;;
 open Board;;
 
-module RealStart : Cookie = struct
+module type Start = sig
+  val start_game : unit -> Game.game
+end
+
+module RealStart : Start = struct
   let start_tokens (num_players:int) : int TokenMap.t =
     let color_token_count =
       match num_players with
@@ -64,7 +68,7 @@ module RealStart : Cookie = struct
     { Game.players; Game.board }
 end
 
-module DummyStart : Cookie = struct
+module DummyStart : Start = struct
   let start_game () =
     let empty_deck = { deck=[]; revealed=[] } in
     let start_board = { one=empty_deck; two=empty_deck; three=empty_deck; nobles=[]; tokens=TokenMap.empty } in

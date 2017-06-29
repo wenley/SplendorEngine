@@ -19,6 +19,9 @@
  *     - Put back tokens
  * - After each full loop, check for end of game (game.ml, engine.ml)
  *)
+module type Engine = sig
+  val play : Game.game -> Game.game
+end
 
 module Engine (G:Game.Game) : Engine = struct
   (**
