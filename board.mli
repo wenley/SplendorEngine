@@ -20,8 +20,6 @@ type board = {
   tokens: tokens
 }
 
-val tier_for_board : tier_level -> board -> card deck
-
 val card_at : tier_level -> int -> board -> card option
 
 (**
