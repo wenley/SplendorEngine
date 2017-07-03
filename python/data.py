@@ -72,4 +72,5 @@ class Board(object):
 
     @staticmethod
     def default_board():
+        # TODO
         return Board([], [], [])
